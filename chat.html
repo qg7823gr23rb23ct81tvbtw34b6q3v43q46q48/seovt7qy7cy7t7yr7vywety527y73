@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prosify Chat - Inquiry Center</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0066cc',
+                        accent: '#ffd600',
+                        bubbleOut: '#d9fdd3',
+                        bubbleIn: '#ffffff',
+                        chatBg: '#efeae2'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Material 3 Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        /* Tactile touch suppression */
+        *, *::before, *::after {
+            font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-focus-ring-color: transparent !important;
+            outline: none !important;
+        }
+        *:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        /* Custom scrollbar */
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+        /* Custom Typing Dot Animation */
+        @keyframes typing-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .typing-dot {
+            animation: typing-bounce 1.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen overflow-hidden flex flex-col select-none">
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="text-center flex flex-col items-center">
+            <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify" class="h-20 w-auto object-contain mb-6 animate-pulse">
+            <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+            <h2 class="text-lg font-bold text-gray-800">Prosify Chat</h2>
+            <p class="text-xs text-gray-500 mt-1">Connecting to secure server...</p>
+        </div>
+    </div>
+
+    <!-- PWA Install Prompt Modal -->
+    <div id="pwaModal" class="fixed inset-0 bg-black/60 z-40 flex items-center justify-center p-4 hidden">
+        <div class="bg-white max-w-sm w-full rounded-2xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300">
+            <div class="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-primary text-4xl">mobile_screen_share</span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900">Install Prosify Chat</h3>
+            <p class="text-sm text-gray-600 mt-2">Installing can make you easily see messages and reach the chats directly from your home screen.</p>
+            <div class="flex gap-3 mt-6">
+                <button onclick="dismissPwa()" class="flex-1 py-2.5 rounded-full border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">Later</button>
+                <button onclick="triggerPwaInstall()" class="flex-1 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-opacity-95 transition shadow-md">Install</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Info Window Modal -->
+    <div id="infoModal" class="fixed inset-0 bg-black/60 z-40 flex items-center justify-center p-4 hidden" onclick="toggleInfoModal()">
+        <div class="bg-white max-w-sm w-full rounded-2xl p-6 shadow-2xl text-center" onclick="event.stopPropagation()">
+            <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-primary text-3xl">info</span>
+            </div>
+            <h3 class="text-md font-bold text-gray-900">Chat Environment Info</h3>
+            <p class="text-xs text-gray-600 mt-3 leading-relaxed text-left">
+                • This chat window interfaces directly with Prosify real estate advisors.<br><br>
+                • Initial brochure transfers are handled autonomously. If manual advisory routing is required, real agent responses may take between <strong class="text-primary">5 - 7 Hours</strong> depending on queue loads.
+            </p>
+            <button onclick="toggleInfoModal()" class="w-full py-2.5 rounded-full bg-primary text-white text-xs font-bold hover:bg-opacity-95 mt-6 transition shadow">Got It</button>
+        </div>
+    </div>
+
+    <!-- Fully Responsive, Full-screen WhatsApp-like Chat UI -->
+    <div class="flex-grow flex flex-col h-full bg-chatBg w-full relative">
+        
+        <!-- Header -->
+        <header class="bg-primary text-white px-4 py-3 flex items-center justify-between shadow-md relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <img src="https://i.ibb.co/CpcHd39k/favicon.png" alt="Prosify Advisor" class="w-10 h-10 rounded-full border border-white/20 bg-white object-contain">
+                    <span id="headerPresenceBadge" class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-gray-400 border-2 border-primary"></span>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold tracking-tight">Prosify Inquiry Chat</h1>
+                    <p id="headerPresenceText" class="text-[10px] opacity-85 font-medium">offline</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleInfoModal()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-white text-md">info</span>
+                </button>
+                <a href="tel:+919167891679" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition">
+                    <span class="material-symbols-outlined text-white text-md">call</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Message List Workspace -->
+        <div id="chatBody" class="flex-grow overflow-y-auto px-4 py-4 space-y-3 chat-scroll" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-color: #efeae2;">
+            <!-- Bubbles dynamically written here -->
+        </div>
+
+        <!-- Offline Restrict Warning Banner (hidden by default) -->
+        <div id="offlineRestrictBanner" class="hidden bg-amber-50 border-t border-amber-200/60 px-4 py-3 text-center flex flex-col items-center justify-center gap-1 relative z-10">
+            <span class="material-symbols-outlined text-amber-500 text-xl animate-pulse">hourglass_bottom</span>
+            <p class="text-[11px] font-semibold text-amber-800">Inquiry registered. Waiting for Sales Partner to go online to continue chatting...</p>
+        </div>
+
+        <!-- Footer Input dock -->
+        <footer id="chatFooterDock" class="bg-gray-100 px-3 py-2.5 border-t border-gray-200 flex items-center gap-2 relative z-10">
+            <!-- Hidden Image File input -->
+            <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageSelection(this)">
+            <button onclick="triggerImageInput()" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition flex-shrink-0 text-gray-500 hover:text-primary">
+                <span class="material-symbols-outlined text-gray-500 hover:text-primary text-xl">attach_file</span>
+            </button>
+            
+            <div class="flex-grow relative">
+                <input type="text" id="messageInput" placeholder="Type a message..." oninput="handleTypingNotification()" class="w-full bg-white border border-gray-200 rounded-full py-2.5 pl-4 pr-10 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary">
+            </div>
+
+            <button onclick="handleTextMessageSend()" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-opacity-95 transition flex-shrink-0 shadow">
+                <span class="material-symbols-outlined text-white text-md">send</span>
+            </button>
+        </footer>
+
+        <!-- Sleek Bottom Footer Attribution -->
+        <div class="bg-gray-100 text-center py-2 text-[10px] text-gray-400 border-t border-gray-200/50 flex items-center justify-center gap-1 relative z-10">
+            <span>Designed and Developed by</span>
+            <a href="https://ninsara.is-a.dev" target="_blank" class="font-bold text-primary hover:underline">Zeno Developers</a>
+        </div>
+
+    </div>
+
+    <!-- Firebase System SDK Core Integrations module -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+        import { getDatabase, ref, set, push, onValue, update, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+        // Web App Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDneyB_Y2FWvNKZuzuprP0FSfr7EKJkIQ",
+            authDomain: "bc2r37b2y78.firebaseapp.com",
+            databaseURL: "https://bc2r37b2y78-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "bc2r37b2y78",
+            storageBucket: "bc2r37b2y78.firebasestorage.app",
+            messagingSenderId: "636563858750",
+            appId: "1:636563858750:web:39c96e81c74dbf8a1b386f",
+            measurementId: "G-W102P0G64G"
+        };
+
+        // Initialize Firebase instances
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        // Persistent Session Details extraction
+        let lead = JSON.parse(localStorage.getItem('leadData') || '{}');
+        if (!lead.phone) {
+            const inquiries = JSON.parse(localStorage.getItem('submittedInquiries') || '[]');
+            if (inquiries.length > 0) {
+                lead = inquiries[inquiries.length - 1];
+            } else {
+                // Fallback structured Guest context
+                lead = {
+                    firstName: "Guest",
+                    lastName: "User",
+                    email: "guest@prosify.in",
+                    phone: "9999999999",
+                    project: "Prosify Heights",
+                    submittedAt: new Date().toISOString()
+                };
+            }
+        }
+
+        // Sanitize identifiers
+        const cleanPhone = lead.phone.replace(/[^0-9]/g, '');
+        const cleanProj = lead.project.toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-');
+        const sessionId = `chat_${cleanPhone}_${cleanProj}`;
+
+        // DB References paths
+        const sessionMetaRef = ref(db, `chat_sessions/${sessionId}/meta`);
+        const sessionMsgRef = ref(db, `chat_sessions/${sessionId}/messages`);
+
+        // Global states to manage visibility rules
+        let brochureHasBeenSent = false;
+        let advisorIsOnlineState = false;
+        let advisorIsTypingState = false;
+
+        // Typing Notification Debounce tracker
+        let typingTimeout = null;
+
+        // Offline tracking configuration
+        const myPresenceRef = ref(db, `chat_sessions/${sessionId}/meta/online`);
+        const myLastSeenRef = ref(db, `chat_sessions/${sessionId}/meta/lastSeen`);
+        const myTypingRef = ref(db, `chat_sessions/${sessionId}/meta/typing`);
+
+        // Synchronize presence configurations with connection meta
+        const connectedRef = ref(db, ".info/connected");
+        onValue(connectedRef, (snap) => {
+            if (snap.val() === true) {
+                // Configure disconnect rules
+                onDisconnect(myPresenceRef).set(false);
+                onDisconnect(myLastSeenRef).set(serverTimestamp());
+                onDisconnect(myTypingRef).set(false);
+
+                // Set online state
+                update(sessionMetaRef, {
+                    userName: `${lead.firstName} ${lead.lastName}`,
+                    userPhone: lead.phone,
+                    userEmail: lead.email,
+                    project: lead.project,
+                    online: true,
+                    typing: false
+                });
+            }
+        });
+
+        // Sync Advisor Presence and Typing details dynamically into chat view header
+        const advisorPresenceRef = ref(db, `chat_sessions/${sessionId}/meta/advisorOnline`);
+        const advisorTypingRef = ref(db, `chat_sessions/${sessionId}/meta/advisorTyping`);
+        const advisorLastSeenRef = ref(db, `chat_sessions/${sessionId}/meta/advisorLastSeen`);
+
+        onValue(advisorPresenceRef, (snap) => {
+            const isOnline = snap.val() === true;
+            advisorIsOnlineState = isOnline;
+            
+            const badge = document.getElementById('headerPresenceBadge');
+            const text = document.getElementById('headerPresenceText');
+            if (isOnline) {
+                badge.className = "absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-primary";
+                text.innerText = "online";
+            } else {
+                badge.className = "absolute bottom-0 right-0 w-3 h-3 rounded-full bg-gray-400 border-2 border-primary";
+                onValue(advisorLastSeenRef, (lsSnap) => {
+                    const ts = lsSnap.val();
+                    if (ts) {
+                        text.innerText = `last seen ${formatMessageTime(ts)}`;
+                    } else {
+                        text.innerText = "offline";
+                    }
+                });
+            }
+
+            // Dynamically re-evaluate restriction panel visibility
+            evaluateInputVisibility();
+        });
+
+        onValue(advisorTypingRef, (snap) => {
+            const isTyping = snap.val() === true;
+            advisorIsTypingState = isTyping;
+
+            const text = document.getElementById('headerPresenceText');
+            if (isTyping) {
+                text.innerText = "typing...";
+            } else {
+                if (advisorIsOnlineState) {
+                    text.innerText = "online";
+                } else {
+                    onValue(advisorLastSeenRef, (lsSnap) => {
+                        const ts = lsSnap.val();
+                        text.innerText = ts ? `last seen ${formatMessageTime(ts)}` : "offline";
+                    });
+                }
+            }
+
+            // Refresh message timeline display to render or hide the interactive typing bubble
+            renderChatHistory(localMessageCache);
+        });
+
+        // Initialize Chat Messages List and Local Storage Caching Sync
+        const localCacheKey = `cached_messages_${sessionId}`;
+        let localMessageCache = JSON.parse(localStorage.getItem(localCacheKey) || '[]');
+        
+        // Render Cached messages instantly to prevent laggy page flashes
+        if (localMessageCache.length > 0) {
+            // Pre-evaluate if local cache contains the brochure already
+            brochureHasBeenSent = localMessageCache.some(msg => msg.fileType === "pdf");
+            renderChatHistory(localMessageCache);
+            evaluateInputVisibility();
+            hideLoadingScreen();
+        }
+
+        // Real-time synchronization loop from RTDB
+        onValue(sessionMsgRef, (snapshot) => {
+            const data = snapshot.val();
+            let freshMessages = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    freshMessages.push({ id: key, ...data[key] });
+                });
+            }
+
+            // Check if brochure is inside fresh sync data
+            brochureHasBeenSent = freshMessages.some(msg => msg.fileType === "pdf");
+
+            // Sync with localstorage cache
+            localMessageCache = freshMessages;
+            localStorage.setItem(localCacheKey, JSON.stringify(freshMessages));
+            renderChatHistory(freshMessages);
+            evaluateInputVisibility();
+            hideLoadingScreen();
+
+            // Run Auto-responder trigger logic if this is a first-time fresh thread context
+            if (freshMessages.length === 0) {
+                triggerAutomaticWelcomeWorkflow();
+            }
+
+            // Read Receipts Trigger logic: update any unread incoming messages to read state
+            freshMessages.forEach(msg => {
+                if (msg.sender === "advisor" && msg.status !== "read") {
+                    update(ref(db, `chat_sessions/${sessionId}/messages/${msg.id}`), {
+                        status: "read"
+                    });
+                }
+            });
+        });
+
+        // Toggle visibility of input controls based on advisor activity & brochure delivery [Advisor activity Gating]
+        function evaluateInputVisibility() {
+            const footer = document.getElementById('chatFooterDock');
+            const restrictBanner = document.getElementById('offlineRestrictBanner');
+            if (!footer || !restrictBanner) return;
+
+            if (brochureHasBeenSent && !advisorIsOnlineState) {
+                footer.classList.add('hidden');
+                restrictBanner.classList.remove('hidden');
+            } else {
+                footer.classList.remove('hidden');
+                restrictBanner.classList.add('hidden');
+            }
+        }
+
+        // Trigger automatic inquiry context welcome sequence
+        async function triggerAutomaticWelcomeWorkflow() {
+            // Step 1: User details auto statement dispatch
+            const welcomeText = `Hi, I'm ${lead.firstName} ${lead.lastName}. I'm interested in getting more details about the property "${lead.project}" that I came across on Prosify. Please share the brochure and relevant details!`;
+            
+            const firstMsgRef = push(sessionMsgRef);
+            await set(firstMsgRef, {
+                sender: "user",
+                text: welcomeText,
+                timestamp: Date.now(),
+                status: "read"
+            });
+
+            // Simulate agent attention with delayed mock replies
+            setTimeout(() => {
+                update(sessionMetaRef, { advisorTyping: true });
+            }, 1500);
+
+            setTimeout(async () => {
+                const welcomeReplyText = `Hello ${lead.firstName}! Thank you for choosing Prosify Homes. I would be happy to share the official details. Let me fetch the brochure document for "${lead.project}" right away.`;
+                const replyRef = push(sessionMsgRef);
+                await set(replyRef, {
+                    sender: "advisor",
+                    text: welcomeReplyText,
+                    timestamp: Date.now(),
+                    status: "read"
+                });
+                update(sessionMetaRef, { advisorTyping: false });
+            }, 4500);
+
+            // Fetch the brochure from GitHub catalog in background and send PDF card
+            setTimeout(async () => {
+                update(sessionMetaRef, { advisorTyping: true });
+                const brochureUrl = await fetchBrochureFromCatalog(lead.project);
+                
+                const brochureMsgRef = push(sessionMsgRef);
+                await set(brochureMsgRef, {
+                    sender: "advisor",
+                    text: `Official brochure for ${lead.project}. Click the link to view or download.`,
+                    fileUrl: brochureUrl,
+                    fileName: `${cleanProj}_brochure.pdf`,
+                    fileType: "pdf",
+                    timestamp: Date.now(),
+                    status: "read"
+                });
+                update(sessionMetaRef, { advisorTyping: false });
+            }, 8000);
+        }
+
+        // Fetch brochure dynamically from GitHub JSON chunks
+        async function fetchBrochureFromCatalog(projectTitle) {
+            const fallbackBrochure = "https://raw.githubusercontent.com/qg7823gr23rb23ct81tvbtw34b6q3v43q46q48/q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w/main/media/general_brochure.pdf";
+            const normalizedTargetTitle = projectTitle.toString().toLowerCase().trim();
+            const REPO_OWNER = "qg7823gr23rb23ct81tvbtw34b6q3v43q46q48";
+            const REPO_NAME = "q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w";
+            
+            try {
+                let fetchedList = [];
+                const res0 = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/landdata.json`);
+                if (res0.ok) {
+                    const d0 = await res0.json();
+                    if (Array.isArray(d0)) fetchedList = fetchedList.concat(d0);
+                }
+
+                // Check other chunks
+                const promises = [1, 2, 3, 4, 5].map(idx => {
+                    return fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/landdata${idx}.json`)
+                        .then(r => r.ok ? r.json() : null)
+                        .catch(() => null);
+                });
+
+                const results = await Promise.all(promises);
+                results.forEach(d => {
+                    if (d && Array.isArray(d)) fetchedList = fetchedList.concat(d);
+                });
+
+                const matchedItem = fetchedList.find(p => p.title && p.title.toString().toLowerCase().trim() === normalizedTargetTitle);
+                if (matchedItem && matchedItem.brochure) {
+                    return matchedItem.brochure;
+                }
+            } catch (e) {
+                console.warn("Failed retrieving project catalog: ", e);
+            }
+            return fallbackBrochure;
+        }
+
+        // Outgoing Message Dispatcher
+        window.handleTextMessageSend = async function() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = "";
+            update(sessionMetaRef, { typing: false });
+
+            const newMsgRef = push(sessionMsgRef);
+            await set(newMsgRef, {
+                sender: "user",
+                text: text,
+                timestamp: Date.now(),
+                status: "sent"
+            });
+        };
+
+        // Downscale upload image below 50KB constraints via Canvas conversion [50KB = ~68,000 base64 chars]
+        window.handleImageSelection = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = async function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        const maxDimension = 600;
+                        if (width > maxDimension || height > maxDimension) {
+                            if (width > height) {
+                                height = Math.round((height * maxDimension) / width);
+                                width = maxDimension;
+                            } else {
+                                width = Math.round((width * maxDimension) / height);
+                                height = maxDimension;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        let quality = 0.7;
+                        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                        // Compression Loop strictly below 50KB
+                        while (dataUrl.length > 68000 && quality > 0.1) {
+                            quality -= 0.1;
+                            dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        // Save image message to Firebase RTDB
+                        const newMsgRef = push(sessionMsgRef);
+                        await set(newMsgRef, {
+                            sender: "user",
+                            text: "Sent an image",
+                            fileUrl: dataUrl,
+                            fileType: "image",
+                            timestamp: Date.now(),
+                            status: "sent"
+                        });
+                    };
+                };
+            }
+        };
+
+        // Real-time typing notification loop
+        window.handleTypingNotification = function() {
+            update(sessionMetaRef, { typing: true });
+            
+            if (typingTimeout) clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                update(sessionMetaRef, { typing: false });
+            }, 2000);
+        };
+
+        // Enter key listeners
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleTextMessageSend();
+        });
+
+        // Expose critical flags for visual DOM rendering loop
+        window.getAdvisorTypingState = () => advisorIsTypingState;
+    </script>
+
+    <!-- UI DOM Controls and Helpers -->
+    <script>
+        // Render Chat History bubbles
+        function renderChatHistory(messages) {
+            const body = document.getElementById('chatBody');
+            if (!body) return;
+
+            let html = messages.map(msg => {
+                const isUser = msg.sender === "user";
+                const timeStr = formatMessageTime(msg.timestamp);
+                
+                let bubbleContent = "";
+                if (msg.fileType === "image") {
+                    bubbleContent = `<img src="${msg.fileUrl}" class="rounded-lg max-w-full h-auto object-cover max-h-60 shadow-sm border border-gray-100" alt="Image Message">`;
+                } else if (msg.fileType === "pdf") {
+                    bubbleContent = `
+                        <a href="${msg.fileUrl}" target="_blank" download="${msg.fileName || 'brochure.pdf'}" class="flex items-center gap-3 bg-white/50 hover:bg-white/80 p-3 rounded-xl border border-gray-200/50 transition">
+                            <div class="bg-red-100 w-10 h-10 rounded-lg flex items-center justify-center text-red-600 flex-shrink-0">
+                                <span class="material-symbols-outlined text-red-600 text-2xl">picture_as_pdf</span>
+                            </div>
+                            <div class="overflow-hidden flex-grow">
+                                <p class="text-xs font-bold text-gray-800 truncate">${msg.fileName || 'brochure.pdf'}</p>
+                                <p class="text-[10px] text-gray-500 font-semibold uppercase mt-0.5">Click to Open PDF</p>
+                            </div>
+                        </a>
+                    `;
+                } else {
+                    bubbleContent = `<p class="text-xs font-medium text-gray-800 leading-relaxed whitespace-pre-wrap">${msg.text}</p>`;
+                }
+
+                // Tick layout logic
+                let ticksHtml = "";
+                if (isUser) {
+                    if (msg.status === "read") {
+                        ticksHtml = `<span class="text-blue-400 font-bold ml-1" style="font-size: 10px;">✓✓</span>`;
+                    } else if (msg.status === "delivered") {
+                        ticksHtml = `<span class="text-gray-400 font-bold ml-1" style="font-size: 10px;">✓✓</span>`;
+                    } else {
+                        ticksHtml = `<span class="text-gray-400 font-semibold ml-1" style="font-size: 10px;">✓</span>`;
+                    }
+                }
+
+                return `
+                    <div class="flex w-full ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in">
+                        <div class="max-w-[75%] rounded-2xl px-3.5 py-2.5 shadow-sm relative ${isUser ? 'bg-bubbleOut rounded-tr-none' : 'bg-bubbleIn rounded-tl-none'}">
+                            ${bubbleContent}
+                            <div class="flex items-center justify-end gap-1 mt-1 text-[9px] text-gray-500 font-medium">
+                                <span>${timeStr}</span>
+                                ${ticksHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Append dynamic bouncing bubble with loading-like dots if the advisor is typing
+            if (typeof window.getAdvisorTypingState === 'function' && window.getAdvisorTypingState() === true) {
+                html += `
+                    <div class="flex w-full justify-start animate-fade-in">
+                        <div class="max-w-[75%] rounded-2xl px-4 py-3.5 bg-bubbleIn rounded-tl-none shadow-sm flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot" style="animation-delay: 0s;"></span>
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot" style="animation-delay: 0.2s;"></span>
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot" style="animation-delay: 0.4s;"></span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            body.innerHTML = html;
+
+            // Automatically scroll to bottom of view on messages arrivals
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function formatMessageTime(timestamp) {
+            if (!timestamp) return "";
+            const date = new Date(timestamp);
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            return hours + ':' + minutes + ' ' + ampm;
+        }
+
+        function hideLoadingScreen() {
+            const screen = document.getElementById('loadingScreen');
+            if (screen) {
+                screen.classList.add('opacity-0');
+                setTimeout(() => screen.remove(), 500);
+            }
+        }
+
+        // Modal triggers
+        function toggleInfoModal() {
+            const modal = document.getElementById('infoModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function triggerImageInput() {
+            document.getElementById('imageInput').click();
+        }
+
+        // PWA INTEGRATION AND BINDINGS
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function dismissPwa() {
+            localStorage.setItem('pwa_prompt_dismissed', 'true');
+            document.getElementById('pwaModal').classList.add('hidden');
+        }
+
+        function triggerPwaInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('pwaModal').classList.add('hidden');
+                });
+            } else {
+                alert("Installation is managed directly by your web browser on this system. Click the browser menu button and select 'Add to Home screen' or 'Install' to save Prosify Chat.");
+                document.getElementById('pwaModal').classList.add('hidden');
+            }
+        }
+
+        // Dynamic registration of Service Worker, Web App Manifest Blob URL & auto-prompt loop
+        window.addEventListener('load', () => {
+            // Register SW Blob
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+                self.addEventListener('fetch', e => {});
+            `;
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration skipped', err));
+
+            // Dynamic Manifest link injection
+            const manifestObj = {
+                "name": "Prosify Chat",
+                "short_name": "Prosify Chat",
+                "start_url": window.location.href,
+                "display": "standalone",
+                "background_color": "#ffffff",
+                "theme_color": "#0066cc",
+                "icons": [
+                    { "src": "https://i.ibb.co/CpcHd39k/favicon.png", "sizes": "192x192", "type": "image/png" },
+                    { "src": "https://i.ibb.co/CpcHd39k/favicon.png", "sizes": "512x512", "type": "image/png" }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestUrl;
+            document.head.appendChild(link);
+
+            // Force show PWA popup automatically after 4 seconds if not previously dismissed
+            if (!localStorage.getItem('pwa_prompt_dismissed')) {
+                setTimeout(() => {
+                    const modal = document.getElementById('pwaModal');
+                    if (modal) modal.classList.remove('hidden');
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>
