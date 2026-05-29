@@ -1,0 +1,1963 @@
+html
+<!DOCTYPE html>
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Prosify - Live In Your Future</title> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
+<link rel="preconnect" href="https://fonts.googleapis.com"> 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+<style> 
+    *{margin:0;padding:0;box-sizing:border-box} 
+    body{font-family:'Montserrat',sans-serif;background:#fff;color:#000;overflow-x:hidden}
+
+    /* TOP BAR & SEARCH BAR */
+    .top-bar{background:#ffd600;padding:0 40px;display:flex;justify-content:space-between;align-items:center;height:65px;position:fixed;top:0;left:0;width:100%;z-index:1000;margin:0;border:none;outline:none}
+    .top-bar-left{display:flex;align-items:center;gap:20px}
+    .top-bar-left a{display:flex;align-items:center}
+    .top-bar-left img{height:42px;width:auto;filter:brightness(0);display:block}
+    
+    .header-search-container{display:flex;align-items:center;background:#fff;border:1px solid #e0e0e0;padding:2px 8px;border-radius:4px;width:240px;margin-left:15px}
+    .header-search-container input{border:none;outline:none;font-family:'Montserrat',sans-serif;font-size:0.8rem;width:100%;padding:4px}
+    .header-search-container button{background:none;border:none;cursor:pointer;color:#444;padding:4px}
+    .header-search-container button:hover{color:#0066cc}
+
+    .top-bar-right{display:flex;align-items:center;gap:20px}
+    .top-bar-right nav ul{list-style:none;display:flex;gap:0;align-items:center}
+    .top-bar-right nav ul li a{text-decoration:none;color:#000;font-weight:500;font-size:.8rem;padding:20px 14px;display:block;text-transform:uppercase;letter-spacing:1.5px;transition:opacity .3s}
+    .top-bar-right nav ul li a:hover{opacity:.5}
+    .phone-section{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .phone-section i{font-size:.9rem;color:#000}
+    .phone-section span{font-weight:500;font-size:.8rem;color:#000;letter-spacing:1px}
+    .hamburger{display:none;flex-direction:column;cursor:pointer;gap:6px;z-index:1001}
+    .hamburger span{width:26px;height:2.5px;background:#000;transition:all .3s}
+    .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
+    .hamburger.active span:nth-child(2){opacity:0}
+    .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+
+    .mobile-search-wrapper{display:none;padding:10px 20px;border-bottom:1px solid rgba(0,0,0,0.1)}
+
+    /* CAROUSEL (WHITE SUBPIXEL gap REMOVAL) [ssl.json] */
+    .carousel-container {
+        margin-top: 64px !important;
+        position: relative;
+        width: 100%;
+        padding-top: 43.75%;
+        overflow: hidden;
+        background: #000;
+        border: none;
+        outline: none;
+    }
+    @media(max-width: 768px) {
+        .carousel-container {
+            margin-top: 57px !important;
+        }
+    }
+    .carousel-track{position:absolute;top:0;left:0;width:100%;height:100%}
+    .carousel-slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 1s}
+    .carousel-slide.active{opacity:1}
+    .carousel-slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+    .carousel-slide.slide-blurred img{filter:blur(3px);transform:scale(1.02)}
+    .carousel-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;padding-left:8%}
+    .carousel-text{max-width:550px}
+    .carousel-text h2{font-weight:700;font-size:3.2rem;line-height:1.15;margin-bottom:18px}
+    .carousel-text p{font-weight:300;font-size:1rem;line-height:1.7;margin-bottom:30px;max-width:420px}
+    .carousel-btn{display:inline-block;text-decoration:none;font-weight:300;font-size:.75rem;text-transform:uppercase;letter-spacing:3px;padding:14px 35px;border:1px solid;transition:all .3s;background:transparent;cursor:pointer}
+    .slide-dark .carousel-text h2,.slide-dark .carousel-text p{color:#000}
+    .slide-dark .carousel-btn{color:#000;border-color:#000}
+    .slide-dark .carousel-btn:hover{background:#000;color:#fff}
+    .slide-light .carousel-text h2,.slide-light .carousel-text p{color:#fff}
+    .slide-light .carousel-btn{color:#fff;border-color:#fff}
+    .slide-light .carousel-btn:hover{background:#fff;color:#000}
+    .carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;font-size:2rem;cursor:pointer;z-index:10;width:50px;height:50px;display:flex;align-items:center;justify-content:center;transition:opacity .3s;opacity:.5}
+    .carousel-arrow:hover{opacity:1}
+    .carousel-arrow-left{left:25px}
+    .carousel-arrow-right{right:25px}
+    .carousel-arrow.arrow-dark{color:#000}
+    .carousel-arrow.arrow-light{color:#fff}
+    .carousel-dots{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
+    .carousel-dot{width:10px;height:10px;border:1px solid #fff;background:transparent;cursor:pointer;transition:all .3s;padding:0}
+    .carousel-dot.active{background:#fff}
+    .carousel-dot.dot-dark{border-color:#000}
+    .carousel-dot.dot-dark.active{background:#000}
+
+    /* WELCOME SECTION */
+    .welcome-section{padding:80px 40px 40px;background:#fff;max-width:1000px;margin:0 auto;text-align:center}
+    .welcome-section h2{font-weight:700;font-size:2.8rem;color:#000;margin-bottom:25px}
+    .welcome-long{font-weight:300;font-size:.95rem;color:#444;line-height:2;max-width:850px;margin:0 auto}
+    .welcome-short{display:none;font-weight:300;font-size:.9rem;color:#444;line-height:1.8;max-width:600px;margin:0 auto}
+
+    /* FEATURED PROPERTIES (HOME PAGE) */
+    .home-projects-section {
+        padding: 60px 40px;
+        background: #fff;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .home-projects-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .home-projects-title h2 {
+        font-weight: 700;
+        font-size: 2.3rem;
+        color: #000;
+        margin-bottom: 10px;
+    }
+    .home-projects-title p {
+        font-weight: 300;
+        font-size: .95rem;
+        color: #555;
+        letter-spacing: 1px;
+    }
+    .home-projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    @media(min-width: 640px) {
+        .home-projects-grid.cols-2 { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto; }
+        .home-projects-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    .home-projects-loader {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px;
+        font-size: 1rem;
+        color: #666;
+    }
+
+    /* BADGE STRIP BLUE COLOR HIGHLIGHT REMOVAL [ssl.json] */
+    .project-card-badge {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1.5px !important;
+        margin-bottom: 8px !important;
+        display: inline-block !important;
+        width: fit-content !important;
+        padding: 4px 10px !important;
+        border-radius: 4px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* IMAGE TRAINS (HOME PAGE) */
+    .explore-section{padding:40px 0;background:#fff;overflow:hidden}
+    .explore-title{text-align:center;margin-bottom:30px}
+    .explore-title h2{font-weight:700;font-size:2.3rem;color:#000;margin-bottom:10px}
+    .explore-title p{font-weight:300;font-size:.95rem;color:#555;letter-spacing:1px}
+    .trains-container{position:relative}
+    .train-wrapper{overflow:hidden;height:180px;margin-bottom:8px}
+    .train-track{display:flex;gap:8px;height:100%}
+    .train-track img{width:180px;height:180px;object-fit:cover;flex-shrink:0;display:block}
+    .train-right{animation:scrollRight 40s linear infinite}
+    .train-left{animation:scrollLeft 40s linear infinite}
+    @keyframes scrollRight{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes scrollLeft{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+
+    /* EXPLORE OVERLAY OVER IMAGE TRAIN */
+    .explore-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 20;
+        pointer-events: auto;
+    }
+    .explore-blur-bg {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 16px 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    .explore-now-btn {
+        background: #ffd600;
+        color: #000;
+        border: none;
+        padding: 12px 28px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .explore-now-btn:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section{padding:60px 40px;background:#fafafa}
+    .testimonials-title{text-align:center;margin-bottom:40px}
+    .testimonials-title h2{font-weight:700;font-size:1.8rem;color:#000;margin-bottom:8px}
+    .testimonials-title p{font-weight:300;font-size:.85rem;color:#555}
+    .testimonials-carousel{position:relative;max-width:700px;margin:0 auto;overflow:hidden}
+    .testimonials-track{display:flex;transition:transform .6s ease}
+    .testimonial-card{min-width:100%;padding:30px 35px;background:#fff;border:1px solid #eee}
+    .testimonial-top{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .testimonial-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover}
+    .testimonial-info h4{font-weight:600;font-size:.9rem;color:#000;margin-bottom:2px}
+    .testimonial-info span{font-weight:300;font-size:.72rem;color:#888;letter-spacing:1px}
+    .testimonial-stars{margin-bottom:14px;color:#ffd600;font-size:.75rem;letter-spacing:2px}
+    .testimonial-text{font-weight:300;font-size:.82rem;color:#444;line-height:1.85;font-style:italic}
+    .testimonial-text::before{content:'\201C';font-size:1.5rem;font-weight:700;color:#ffd600;line-height:0;vertical-align:-.35em;margin-right:4px}
+    .testimonial-text::after{content:'\201D';font-size:1.5rem;font-weight:700;color:#ffd600;line-height:0;vertical-align:-.35em;margin-left:4px}
+    .testimonial-nav{display:flex;justify-content:center;gap:10px;margin-top:22px}
+    .testimonial-nav-btn{width:9px;height:9px;border:1px solid #000;background:transparent;cursor:pointer;padding:0;transition:all .3s}
+    .testimonial-nav-btn.active{background:#000}
+    .testimonials-arrows{display:flex;justify-content:center;gap:15px;margin-top:15px}
+    .testimonial-arrow{background:none;border:1px solid #000;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;font-size:.8rem;color:#000}
+    .testimonial-arrow:hover{background:#000;color:#fff}
+
+    /* INDUSTRIAL NEWS */
+    .industrial-news-section{padding:80px 40px;background:#fff;border-top:1px solid #f0f0f0}
+    .news-header{text-align:center;margin-bottom:50px}
+    .news-header h2{font-size:2.4rem;font-weight:800;color:#000;margin-bottom:10px}
+    .news-header p{font-size:0.95rem;color:#666;font-weight:300}
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+    .news-card{border:1px solid #eee;background:#fff;overflow:hidden;border-radius:4px;transition:transform 0.3s}
+    .news-card:hover{transform:translateY(-5px)}
+    .news-img{width:100%;height:220px;object-fit:cover}
+    .news-content{padding:25px}
+    .news-meta{font-size:0.75rem;color:#888;margin-bottom:12px;display:flex;align-items:center;gap:15px;border-bottom:1px solid #f5f5f5;padding-bottom:10px}
+    .news-meta span{display:flex;align-items:center;gap:6px}
+    .news-meta i{color:#0066cc}
+    .news-content h3{font-size:1.2rem;font-weight:700;margin-bottom:12px;line-height:1.4;color:#000}
+    .news-content p{font-size:0.85rem;color:#555;line-height:1.6;font-weight:300;margin-bottom:15px}
+
+    /* DYNAMIC SPA PAGES */
+    .dynamic-page{display:none;margin-top:65px;padding:80px 40px;background:#fff;animation:fadeInPage 0.4s ease-out}
+    @keyframes fadeInPage{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    
+    /* DYNAMIC SERVICES PAGE */
+    .services-wrapper{max-width:1200px;margin:0 auto}
+    .services-intro-title{text-align:center;margin-bottom:60px}
+    .services-intro-title h2{font-size:2.5rem;font-weight:800;color:#000;margin-bottom:15px}
+    .services-intro-title p{font-size:1rem;color:#666;max-width:800px;margin:0 auto;line-height:1.7;font-weight:300}
+    
+    .services-scrolling-block{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;margin-bottom:80px}
+    .services-scrolling-block.reverse{direction:rtl}
+    .services-scrolling-block.reverse .scrolling-desc{direction:ltr}
+    .scrolling-img-container img{width:100%;height:380px;object-fit:cover;box-shadow:0 12px 32px rgba(0,0,0,0.08);border-radius:4px}
+    .scrolling-desc h3{font-size:1.8rem;font-weight:700;margin-bottom:20px;color:#000;border-left:4px solid #ffd600;padding-left:15px}
+    .scrolling-desc p{font-size:0.95rem;line-height:1.8;color:#444;font-weight:300;margin-bottom:20px}
+    .scrolling-bullet-list{list-style:none}
+    .scrolling-bullet-list li{font-size:0.9rem;line-height:1.7;margin-bottom:12px;color:#333;font-weight:400;display:flex;align-items:center;gap:10px}
+    .scrolling-bullet-list li i{color:#0066cc}
+
+    .gold-benefits-panel{background:#fafafa;border:1px solid #eee;padding:60px 40px;margin:80px 0}
+    .gold-title-section{text-align:center;margin-bottom:45px}
+    .gold-title-section h3{font-size:2.2rem;font-weight:800;color:#000;margin-bottom:12px}
+    .gold-title-section p{font-size:0.95rem;color:#555;font-weight:300}
+    .gold-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px}
+    .gold-card{background:#fff;border:1px solid #eaeaea;padding:40px;position:relative}
+    .gold-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:#ffd600}
+    .gold-card h4{font-size:1.15rem;font-weight:700;margin-bottom:18px;color:#000}
+    .gold-card ul{list-style:none}
+    .gold-card ul li{font-size:0.88rem;color:#444;margin-bottom:14px;line-height:1.6;font-weight:400;display:flex;align-items:flex-start;gap:12px}
+    .gold-card ul li i{color:#0066cc;margin-top:3px;font-size:0.85rem}
+
+    /* DYNAMIC ABOUT US PAGE */
+    .about-wrapper{max-width:1200px;margin:0 auto}
+    .about-main-title{text-align:center;margin-bottom:60px}
+    .about-main-title h2{font-size:2.5rem;font-weight:800;color:#000;margin-bottom:15px}
+    .about-main-title p{font-size:1rem;color:#555;font-weight:300;max-width:800px;margin:0 auto}
+    
+    .about-visionary-row{display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center;margin-bottom:80px}
+    .about-visionary-text h3{font-size:1.8rem;font-weight:700;margin-bottom:20px}
+    .about-visionary-text p{font-size:0.95rem;line-height:1.8;color:#444;font-weight:300;margin-bottom:20px}
+    .about-triple-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .triple-img-card{height:250px;width:100%;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,0.05);border:1px solid #eee}
+
+    /* Polished About Us CSS Blocks */
+    .about-polished-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin: 60px 0;
+    }
+    @media(max-width: 768px) {
+        .about-polished-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .about-choose-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        padding: 40px;
+        border-radius: 6px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        border-top: 4px solid #ffd600;
+    }
+    .about-choose-card h3 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #000;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .about-choose-card ul {
+        list-style: none;
+    }
+    .about-choose-card ul li {
+        font-size: 0.92rem;
+        line-height: 1.8;
+        margin-bottom: 16px;
+        color: #333;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .about-choose-card ul li i {
+        color: #0066cc;
+        font-size: 1.1rem;
+    }
+
+    .about-compliance-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        padding: 40px;
+        border-radius: 6px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        border-top: 4px solid #0066cc;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .about-compliance-card h3 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #000;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .about-compliance-card p {
+        font-size: 0.92rem;
+        line-height: 1.8;
+        color: #444;
+        font-weight: 300;
+    }
+
+    .about-capital-box-polished {
+        background: #111;
+        color: #fff;
+        padding: 60px 40px;
+        text-align: center;
+        border-radius: 6px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        max-width: 950px;
+        margin: 60px auto 0;
+    }
+    .about-capital-box-polished h3 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffd600;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+    .about-capital-box-polished p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #ccc;
+        font-weight: 300;
+        margin-bottom: 30px;
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* REMOVE HYPERLINK STYLES FOR REPRESENTATIVE BUTTON */
+    .promise-call-btn {
+        display: inline-block;
+        text-decoration: none !important;
+        background: #ffd600;
+        color: #000 !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        padding: 14px 30px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }
+    .promise-call-btn:hover {
+        background: #fff;
+        color: #000 !important;
+    }
+
+    .about-interactive-timeline{margin-bottom:80px}
+    .timeline-header{text-align:center;margin-bottom:45px}
+    .timeline-header h3{font-size:1.8rem;font-weight:700}
+    .timeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .timeline-box{background:#fafafa;padding:30px;border-left:3px solid #0066cc}
+    .timeline-box h4{font-size:1.1rem;font-weight:700;margin-bottom:10px}
+    .timeline-box p{font-size:0.85rem;line-height:1.6;color:#555;font-weight:300}
+
+    /* Social Integrations and Address Block */
+    .about-social-address-split{display:grid;grid-template-columns:1fr 1fr;gap:50px;background:#fafafa;padding:50px;border:1px solid #eee;margin-bottom:80px}
+    .about-address-column h4{font-size:1.3rem;font-weight:700;margin-bottom:15px}
+    .about-address-column blockquote{font-size:0.9rem;line-height:1.8;color:#444;font-style:normal;font-weight:300}
+    .about-socials-column h4{font-size:1.3rem;font-weight:700;margin-bottom:15px}
+    .social-buttons-stack{display:flex;flex-direction:column;gap:12px}
+    .social-action-btn{display:flex;align-items:center;gap:12px;text-decoration:none;color:#000;font-weight:500;font-size:0.9rem;padding:14px 20px;border:1px solid #ccc;transition:all 0.3s;width:100%;max-width:320px}
+    .social-action-btn.wa-btn{border-color:#25d366;color:#25d366}
+    .social-action-btn.wa-btn:hover{background:#25d366;color:#fff}
+    .social-action-btn.fb-btn{border-color:#1877f2;color:#1877f2}
+    .social-action-btn.fb-btn:hover{background:#1877f2;color:#fff}
+    .social-action-btn.yt-btn{border-color:#ff0000;color:#ff0000}
+    .social-action-btn.yt-btn:hover{background:#ff0000;color:#fff}
+
+    /* DYNAMIC PROJECTS PAGE */
+    .projects-wrapper{max-width:1200px;margin:0 auto}
+    .projects-header{text-align:center;margin-bottom:40px}
+    .projects-header h2{font-size:2.5rem;font-weight:800;margin-bottom:10px}
+    .projects-header p{font-size:0.95rem;color:#666;font-weight:300}
+    
+    .projects-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:40px;flex-wrap:wrap}
+    .project-tab-btn{background:none;border:1px solid #ddd;padding:10px 24px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.3s}
+    .project-tab-btn.active, .project-tab-btn:hover{background:#000;color:#fff;border-color:#000}
+    
+    .projects-grid-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px}
+    .project-item-card{border:1px solid #eee;background:#fff;overflow:hidden;border-radius:4px;display:flex;flex-direction:column}
+    .project-item-card img{width:100%;height:220px;object-fit:cover}
+    .project-card-body{padding:25px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .project-card-badge{font-size:0.72rem;color:#0066cc;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:block}
+    .project-card-body h3{font-size:1.15rem;font-weight:700;margin-bottom:8px;color:#000}
+    .project-card-body p{font-size:0.82rem;color:#666;line-height:1.6;font-weight:300;margin-bottom:15px}
+    .project-card-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f2f2f2;padding-top:15px}
+    .project-card-price{font-weight:700;font-size:0.95rem;color:#000}
+    .project-card-btn{background:#ffd600;color:#000;border:none;padding:8px 18px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.3s}
+    .project-card-btn:hover{background:#000;color:#fff}
+
+    /* DYNAMIC GALLERY PAGE */
+    .gallery-wrapper{max-width:1200px;margin:0 auto}
+    .gallery-header{text-align:center;margin-bottom:45px}
+    .gallery-header h2{font-size:2.3rem;font-weight:800;margin-bottom:10px}
+    .gallery-header p{font-size:0.95rem;color:#666;font-weight:300}
+    
+    .gallery-grid-1to1 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    .gallery-tile {
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border: 1px solid #eee;
+        background: #f9f9f9;
+        position: relative;
+    }
+    .gallery-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+    .gallery-tile:hover img {
+        transform: scale(1.05);
+    }
+
+    /* ANAROCK-INSPIRED PROJECT POPUP MODAL (theelite Style placement) [ssl.json] */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(8px);
+        z-index: 3000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        padding: 20px;
+    }
+    .modal-overlay.open {
+        display: flex;
+        opacity: 1;
+    }
+    .detailed-window {
+        background: #fff;
+        width: 95%;
+        max-width: 1200px;
+        height: 90%;
+        max-height: 850px;
+        position: relative;
+        overflow-y: auto;
+        border-radius: 12px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 2.2rem;
+        cursor: pointer;
+        z-index: 50;
+        color: #fff;
+        background: rgba(0,0,0,0.6);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+    .modal-close-btn:hover {
+        color: #ffd600;
+        transform: scale(1.1);
+    }
+    .detailed-header-container {
+        width: 100%;
+        height: 450px;
+        position: relative;
+        background: #000;
+        flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+        .detailed-header-container {
+            height: 280px;
+        }
+    }
+    .detailed-header-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Banner Overlay Title Header Placement similar to elite templates */
+    .detailed-banner-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+        padding: 40px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    @media (max-width: 768px) {
+        .detailed-banner-overlay {
+            padding: 20px;
+        }
+    }
+
+    /* Dual Column Master Grid like elite show layout [ssl.json] */
+    .anarock-grid-container {
+        display: grid;
+        grid-template-columns: 2.1fr 0.9fr;
+        gap: 40px;
+        padding: 40px;
+    }
+    @media (max-width: 900px) {
+        .anarock-grid-container {
+            grid-template-columns: 1fr;
+            padding: 25px;
+            gap: 30px;
+        }
+    }
+    .anarock-left-column {
+        display: flex;
+        flex-direction: column;
+        gap: 45px;
+    }
+    
+    /* Sticky Sidebar Layout like elite show layout [ssl.json] */
+    .anarock-right-column {
+        position: relative;
+    }
+    .anarock-sticky-card {
+        position: sticky;
+        top: 20px;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Headings */
+    .anarock-section-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-left: 4px solid #ffd600;
+        padding-left: 12px;
+        margin-bottom: 20px;
+        color: #000;
+    }
+
+    /* Amenities Grid with big cards */
+    .amenities-anarock-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+    }
+    .amenity-anarock-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 10px;
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        padding: 20px 10px;
+        border-radius: 8px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .amenity-anarock-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .amenity-anarock-card i {
+        font-size: 1.8rem;
+        color: #0066cc;
+    }
+    .amenity-anarock-card span {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Action Trigger CTA buttons matching the Elite layout placements */
+    .sidebar-cta-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 6px;
+        text-decoration: none !important;
+        transition: background 0.3s;
+        width: 100%;
+    }
+    .sidebar-phone-btn {
+        background: #0066cc;
+        color: #fff !important;
+    }
+    .sidebar-phone-btn:hover {
+        background: #0052a3;
+    }
+    .sidebar-wa-btn {
+        background: #25d366;
+        color: #fff !important;
+    }
+    .sidebar-wa-btn:hover {
+        background: #1eb953;
+    }
+
+    /* DYNAMIC SEARCH RESULTS PAGE */
+    .search-results-wrapper{max-width:1100px;margin:0 auto}
+    .search-results-header{margin-bottom:40px;border-bottom:1px solid #eee;padding-bottom:15px}
+    .search-results-header h2{font-size:2rem;font-weight:800}
+    .search-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px}
+
+    /* GLOBAL FOOTER */
+    .global-footer{border-top:1px solid #eee;font-family:'Montserrat',sans-serif}
+    .footer-split{display:flex;width:100%}
+    .footer-left{flex:1.2;background:#ffffff;padding:60px 40px;display:flex;flex-direction:column;justify-content:center}
+    .footer-logo{height:55px;width:auto;align-self:flex-start;margin-bottom:25px}
+    .footer-about-text{font-size:0.85rem;line-height:1.8;color:#0066cc;font-weight:500;max-width:480px}
+    .footer-right{flex:1.8;background:#111;padding:60px 40px;display:flex;gap:50px}
+    .footer-column{flex:1}
+    .footer-column h4{color:#ffd600;font-size:0.95rem;font-weight:700;margin-bottom:25px;text-transform:uppercase;letter-spacing:2px}
+    .footer-column ul{list-style:none}
+    .footer-column ul li{margin-bottom:14px}
+    .footer-column ul li a{color:#bbb;text-decoration:none;font-size:0.85rem;font-weight:400;transition:color 0.3s}
+    .footer-column ul li a:hover{color:#ffd600}
+    .footer-contact-item{color:#ccc;font-size:0.85rem;margin-bottom:15px;display:flex;align-items:center;gap:10px;line-height:1.6}
+    .footer-contact-item i{color:#ffd600;font-size:0.9rem}
+    .footer-social-icons{display:flex;gap:15px;margin-top:25px}
+    .footer-social-icons a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#222;border:1px solid #333;border-radius:50%;color:#ffd600;transition:all 0.3s;text-decoration:none}
+    .footer-social-icons a:hover{background:#0066cc;color:#fff;border-color:#0066cc}
+    .footer-bottom{background:#0a0a0a;color:#666;text-align:center;padding:25px;font-size:0.75rem;border-top:1px solid #1a1a1a}
+
+    /* FAB */
+    .fab-btn{position:fixed;bottom:30px;right:30px;width:58px;height:58px;border-radius:50%;background:#0066cc;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:background .3s}
+    .fab-btn:hover{background:#0052a3}
+    .fab-btn i{font-size:1.5rem;color:#fff}
+
+    /* CHATBOT WIDGET */
+    .chatbot-widget{position:fixed;bottom:100px;right:30px;width:370px;height:520px;background:#fff;border:1px solid #ddd;z-index:2001;display:none;flex-direction:column;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.15);border-radius:8px}
+    .chatbot-widget.open{display:flex}
+    .chatbot-header{background:#0066cc;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+    .chatbot-header span{font-weight:600;font-size:.85rem;color:#fff;letter-spacing:1px}
+    .chatbot-close{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;padding:3px}
+    .chatbot-body{flex:1;overflow:hidden}
+    .chatbot-body iframe{width:100%;height:100%;border:none}
+
+    /* BLANK SPACING */
+    .blank-space{height:15vh;background:#fff}
+
+    /* RESPONSIVE LAYOUTS */
+    @media(max-width:1150px){
+        .top-bar-right nav ul li a{padding:20px 8px;font-size:.75rem}
+        .header-search-container{width:180px}
+    }
+    @media(max-width:1024px){
+        .header-search-container{display:none}
+        .mobile-search-wrapper{display:block}
+        .top-bar{padding:0 20px}
+    }
+    @media(max-width:900px){
+        .carousel-text h2{font-size:2.2rem}
+        .carousel-text p{font-size:.9rem}
+        .welcome-section h2{font-size:2.2rem}
+        .services-scrolling-block, .services-scrolling-block.reverse{grid-template-columns:1fr;gap:30px;direction:ltr}
+        .about-visionary-row{grid-template-columns:1fr;gap:30px}
+        .about-social-address-split{grid-template-columns:1fr;gap:30px}
+    }
+    @media(max-width:768px){
+        .top-bar{padding:0 15px;height:58px}
+        .top-bar-left img{height:36px}
+        .top-bar-right nav{position:fixed;top:58px;left:0;right:0;background:#ffd600;padding:15px 0;transform:translateY(-120%);transition:transform .4s;z-index:999}
+        .top-bar-right nav.active{transform:translateY(0)}
+        .top-bar-right nav ul{flex-direction:column}
+        .top-bar-right nav ul li a{padding:14px 20px;text-align:center}
+        .hamburger{display:flex}
+        .carousel-container{margin-top:58px;padding-top:56%}
+        .carousel-text h2{font-size:1.5rem}
+        .carousel-text p{font-size:.8rem;max-width:280px}
+        .carousel-btn{font-size:.65rem;padding:10px 22px}
+        .carousel-overlay{padding-left:5%}
+        .carousel-arrow{font-size:1.3rem;width:35px;height:35px}
+        .carousel-arrow-left{left:10px}
+        .carousel-arrow-right{right:10px}
+        .welcome-section{padding:50px 25px}
+        .welcome-section h2{font-size:1.8rem}
+        .welcome-long{display:none}
+        .welcome-short{display:block}
+        .testimonial-card{padding:20px 18px}
+        .testimonials-section{padding:40px 20px}
+        .chatbot-widget{width:calc(100vw - 30px);right:15px;bottom:95px;height:450px}
+        .fab-btn{width:52px;height:52px;bottom:22px;right:18px}
+        .dynamic-page{margin-top:58px;padding:50px 20px}
+        .footer-split{flex-direction:column}
+        .footer-left{padding:40px 25px}
+        .footer-right{flex-direction:column;padding:40px 25px;gap:30px}
+        .scrolling-img-container img{height:250px}
+        .about-triple-showcase{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){
+        .carousel-container{padding-top:65%}
+        .carousel-text h2{font-size:1.15rem;margin-bottom:8px}
+        .carousel-text p{font-size:.68rem;margin-bottom:15px;max-width:220px;line-height:1.5}
+        .carousel-btn{font-size:.58rem;padding:8px 18px;letter-spacing:2px}
+        .phone-section span{display:none}
+        .welcome-section h2{font-size:1.4rem}
+    }
+</style>
+
+</head> <body>
+
+<!-- TOP BAR -->
+<header class="top-bar">
+    <div class="top-bar-left">
+        <a href="#home">
+            <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify">
+        </a>
+        <!-- Active Search Bar for Desktop -->
+        <div class="header-search-container">
+            <input type="text" id="desktopSearchInput" placeholder="Search projects...">
+            <button id="desktopSearchBtn" aria-label="Search"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+    <div class="top-bar-right">
+        <nav id="navMenu">
+            <!-- Mobile Search Menu Integration -->
+            <div class="mobile-search-wrapper">
+                <div style="display:flex;align-items:center;background:#fff;border:1px solid #ccc;padding:4px 8px;border-radius:4px;">
+                    <input type="text" id="mobileSearchInput" placeholder="Search projects..." style="border:none;outline:none;font-size:0.85rem;width:100%;padding:4px;font-family:'Montserrat',sans-serif;">
+                    <button id="mobileSearchBtn" style="background:none;border:none;cursor:pointer;color:#444;" aria-label="Search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+            </ul>
+        </nav>
+        <a href="tel:9167891679" class="phone-section">
+            <i class="fas fa-phone"></i>
+            <span>91678-91679</span>
+        </a>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</header>
+
+<!-- LANDING VIEW WRAPPER -->
+<div id="landingPageContent">
+    <!-- CAROUSEL -->
+    <section class="carousel-container" id="home">
+        <div class="carousel-track">
+            <div class="carousel-slide slide-dark slide-blurred active" data-theme="dark">
+                <img src="https://i.ibb.co/vCPryNCg/image.png" alt="Modern Living" loading="eager" decoding="async" fetchpriority="high">
+                <div class="carousel-overlay">
+                    <div class="carousel-text">
+                        <h2>Built for the Future</h2>
+                        <p>Experience modern residential living designed with innovation, comfort, and sustainability at its core.</p>
+                        <a href="#about" class="carousel-btn">LEARN MORE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-slide slide-light" data-theme="light">
+                <img src="https://i.ibb.co/Wr5fNL1/Con-2.png" alt="Premium Homes" loading="eager" decoding="async" fetchpriority="high">
+                <div class="carousel-overlay">
+                    <div class="carousel-text">
+                        <h2>Live in Your Future</h2>
+                        <p>Discover premium residential spaces where every detail is crafted for the way you want to live tomorrow.</p>
+                        <a href="#about" class="carousel-btn">LEARN MORE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-slide slide-light" data-theme="light">
+                <img src="https://i.ibb.co/nsz9kSdb/1779860612962-019e67f5-5bca-7a91-85e3-b00f884d715a.png" alt="Luxury Residences" loading="eager" decoding="async">
+                <div class="carousel-overlay">
+                    <div class="carousel-text">
+                        <h2>Where Home Meets Horizon</h2>
+                        <p>Step into thoughtfully designed residences that blend elegance with everyday functionality.</p>
+                        <a href="#about" class="carousel-btn">LEARN MORE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-slide slide-light" data-theme="light">
+                <img src="https://i.ibb.co/dJXQBxgs/1779866309607-019e684b-7d37-7295-8934-8209c99c219b.png" alt="Dream Spaces" loading="eager" decoding="async">
+                <div class="carousel-overlay">
+                    <div class="carousel-text">
+                        <h2>Spaces That Inspire</h2>
+                        <p>Find your perfect home in communities built around comfort, connection, and a vision for better living.</p>
+                        <a href="#about" class="carousel-btn">LEARN MORE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-arrow carousel-arrow-left arrow-dark" id="arrowLeft"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-arrow carousel-arrow-right arrow-dark" id="arrowRight"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-dots" id="carouselDots">
+            <button class="carousel-dot dot-dark active" data-index="0"></button>
+            <button class="carousel-dot dot-dark" data-index="1"></button>
+            <button class="carousel-dot dot-dark" data-index="2"></button>
+            <button class="carousel-dot dot-dark" data-index="3"></button>
+        </div>
+    </section>
+
+    <!-- WELCOME -->
+    <section class="welcome-section" id="welcomeHome">
+        <h2>Welcome to Prosify</h2>
+        <p class="welcome-long">At Prosify, we believe that a home is more than just four walls and a roof — it is the foundation upon which dreams are built, memories are made, and futures take shape. For over a decade, we have been at the forefront of residential development and community living, transforming landscapes across the country into thriving neighborhoods that families are proud to call home. Our philosophy is rooted in understanding the evolving needs of modern homeowners. We meticulously plan every project, from the initial blueprint to the final finishing touch, ensuring that each residence reflects our unwavering commitment to quality, sustainability, and timeless design. Whether you are a first-time buyer stepping onto the property ladder or a seasoned investor looking for your next venture, Prosify offers a diverse portfolio of residential solutions tailored to suit every lifestyle and budget.</p>
+        <p class="welcome-short">At Prosify, we believe a home is where dreams take shape. For over a decade, we've transformed landscapes into thriving communities that families proudly call home. Our commitment to quality, sustainability, and timeless design ensures every residence we create enhances the lives of those who live there.</p>
+    </section>
+
+    <!-- HOME FEATURED PROPERTIES GRID -->
+    <section class="home-projects-section" id="homeProjects">
+        <div class="home-projects-title">
+            <h2>Featured Projects</h2>
+            <p>Our top-vetted residential and commercial properties</p>
+        </div>
+        <div class="home-projects-grid" id="homeProjectsGrid">
+            <div class="home-projects-loader">
+                <i class="fas fa-spinner fa-spin"></i> Loading featured projects...
+            </div>
+        </div>
+    </section>
+
+    <!-- IMAGE TRAINS IN HOME PAGE WITH CENTERED BLUR BUTTON OVERLAY -->
+    <section class="explore-section">
+        <div class="explore-title">
+            <h2>Endless Possibilities</h2>
+            <p>Discover the spaces we bring to life</p>
+        </div>
+        <div class="trains-container" style="position: relative;">
+            
+            <!-- Blurred Explore Overlay Center Aligned Over Second Row Middle -->
+            <div class="explore-overlay">
+                <div class="explore-blur-bg">
+                    <a href="#projects" class="explore-now-btn">Explore Now</a>
+                </div>
+            </div>
+
+            <div class="train-wrapper"><div class="train-track train-right" id="train1"></div></div>
+            <div class="train-wrapper"><div class="train-track train-left" id="train2"></div></div>
+            <div class="train-wrapper"><div class="train-track train-right" id="train3"></div></div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="testimonials-title">
+            <h2>See What Our Clients Said</h2>
+            <p>Real experiences from real homeowners</p>
+        </div>
+        <div class="testimonials-carousel">
+            <div class="testimonials-track" id="testimonialsTrack">
+                <div class="testimonial-card">
+                    <div class="testimonial-top">
+                        <img src="https://i.pravatar.cc/150?img=32" alt="Ananya Krishnan" class="testimonial-avatar" loading="lazy">
+                        <div class="testimonial-info">
+                            <h4>Ananya Krishnan</h4>
+                            <span>Homeowner since 2022</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testimonial-text">Working with Prosify was an absolutely transformative experience for our family. From the very first consultation to the day we received the keys to our new home, every single step was handled with such professionalism and genuine care that it felt like we were their only client. The team took the time to understand exactly what we envisioned — the open-plan kitchen where our kids could do homework while I cooked, the quiet reading nook my husband always dreamed of, the garden that catches the morning light. They didn't just build us a house; they built us a home that tells our story. The attention to detail in the finishing, the quality of materials, and how they stayed within our budget while exceeding expectations — I honestly cannot recommend them enough. Two years later, every morning I wake up grateful we chose Prosify.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-top">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Rajesh Venkataraman" class="testimonial-avatar" loading="lazy">
+                        <div class="testimonial-info">
+                            <h4>Rajesh Venkataraman</h4>
+                            <span>Resident at Prosify Heights</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <div class="testimonial-text">I've lived in many places throughout my career — apartments in Mumbai, suburban houses in Pune, even a countryside villa in Coorg — but nothing compares to living in a Prosify community. What sets them apart isn't just the architecture, which is stunning and modern, or the amenities, which are world-class. It's the sense of belonging they've fostered. My neighbors and I have become genuine friends, something I never experienced before. The shared spaces are thoughtfully designed to encourage interaction without sacrificing privacy. The maintenance team responds within hours. The landscaping is immaculate year-round. When I had a minor plumbing issue six months after moving in, they sent someone the same afternoon and followed up the next week. That level of after-care is simply unheard of in this industry.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-top">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Deepika Nair" class="testimonial-avatar" loading="lazy">
+                        <div class="testimonial-info">
+                            <h4>Deepika Nair</h4>
+                            <span>First-time Homeowner</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <div class="testimonial-text">As a first-time homebuyer, I was terrified of the entire process. I'd heard horror stories from friends about hidden costs, endless delays, and developers who vanish after taking your money. Prosify was the complete opposite. Their sales team — especially Meera, who guided me through everything — was patient beyond belief. She answered hundreds of my questions over four months and never once made me feel like a burden. They walked me through every document, explained every clause, and even helped me with the bank mortgage process. The transparency was refreshing: no hidden charges, no surprise fees, no last-minute changes. When I finally moved into my two-bedroom apartment, it was exactly what I'd been shown. The construction quality, fittings, paint finish — everything was impeccable. I've since recommended Prosify to my sister and three colleagues, and they've all had similarly wonderful experiences.</div>
+                </div>
+            </div>
+            <div class="testimonial-nav" id="testimonialDots">
+                <button class="testimonial-nav-btn active" data-index="0"></button>
+                <button class="testimonial-nav-btn" data-index="1"></button>
+                <button class="testimonial-nav-btn" data-index="2"></button>
+            </div>
+            <div class="testimonials-arrows">
+                <button class="testimonial-arrow" id="testPrev"><i class="fas fa-chevron-left"></i></button>
+                <button class="testimonial-arrow" id="testNext"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- INDUSTRIAL NEWS (SEE/READ MORE TRIPPED OUT) -->
+    <section class="industrial-news-section">
+        <div class="news-header">
+            <h2>Industrial News</h2>
+            <p>Read the latest industry research, real estate market reports, and property insights</p>
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=500" alt="Market Analysis" class="news-img">
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span><i class="far fa-calendar-alt"></i> May 27, 2026</span>
+                        <span><i class="far fa-clock"></i> 10:30 AM</span>
+                        <span><i class="far fa-user"></i> by Prosify Owner</span>
+                    </div>
+                    <h3>Mumbai Real Estate Appreciates by 12% in Q1</h3>
+                    <p>A comprehensive study of capital values reveals significant urban housing demands within key sub-districts, establishing solid appreciation indices.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=500" alt="Eco Homes" class="news-img">
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span><i class="far fa-calendar-alt"></i> May 24, 2026</span>
+                        <span><i class="far fa-clock"></i> 2:15 PM</span>
+                        <span><i class="far fa-user"></i> by Prosify Owner</span>
+                    </div>
+                    <h3>Modern Sustainability Standards in Housing</h3>
+                    <p>Investigating the adoption of solar smart grids and self-sufficient rainwater recycling setups inside emerging luxury apartment communities.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=500" alt="Guide" class="news-img">
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span><i class="far fa-calendar-alt"></i> May 19, 2026</span>
+                        <span><i class="far fa-clock"></i> 11:00 AM</span>
+                        <span><i class="far fa-user"></i> by Prosify Owner</span>
+                    </div>
+                    <h3>Navigating Gated Community Investments</h3>
+                    <p>Essential points to verify before committing investment capitals towards land acquisitions, including regulatory compliance checklists.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="blank-space"></div>
+</div>
+
+<!-- SERVICES PAGE VIEW -->
+<main id="servicesPage" class="dynamic-page">
+    <div class="services-wrapper">
+        <div class="services-intro-title">
+            <h2>Our Premium Real Estate Solutions</h2>
+            <p>We provide comprehensive advisory, wealth planning, and acquisition services to match families and institutional investors with growth-focused, high-potential residential holdings.</p>
+        </div>
+
+        <!-- Scrollable alternating sections -->
+        <section class="services-scrolling-block">
+            <div class="scrolling-img-container">
+                <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=800" alt="Consultation">
+            </div>
+            <div class="scrolling-desc">
+                <h3>Personalized Advisory & Consultation</h3>
+                <p>Every home buying process begins with identifying customized requirements. Our professionals consult individually with families and corporate entities to construct profiles reflecting specific budgets, spatial needs, and location requirements.</p>
+                <ul class="scrolling-bullet-list">
+                    <li><i class="fas fa-chevron-right"></i> Bespoke property profile curation</li>
+                    <li><i class="fas fa-chevron-right"></i> Detailed spatial and design preference mapping</li>
+                    <li><i class="fas fa-chevron-right"></i> Growth-potential analyses for emerging urban markets</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="services-scrolling-block reverse">
+            <div class="scrolling-img-container">
+                <img src="https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=800" alt="Finance">
+            </div>
+            <div class="scrolling-desc">
+                <h3>Loan & Financial Assistance Support</h3>
+                <p>We smooth over financial complexities by offering robust structural guidance, document verification assistance, and key connections with leading banking institutions for rapid home loan processing.</p>
+                <ul class="scrolling-bullet-list">
+                    <li><i class="fas fa-chevron-right"></i> Independent financial matching based on your yield goals</li>
+                    <li><i class="fas fa-chevron-right"></i> End-to-end loan document processing support</li>
+                    <li><i class="fas fa-chevron-right"></i> Preferential interest rates via corporate financial tie-ups</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="services-scrolling-block">
+            <div class="scrolling-img-container">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800" alt="Construction">
+            </div>
+            <div class="scrolling-desc">
+                <h3>Verified Premium Project Access</h3>
+                <p>Gain priority entries to properties developed by vetted partners. Every asset within our catalogue complies entirely with the RERA regulatory framework, boasting clean titles and validated land rights.</p>
+                <ul class="scrolling-bullet-list">
+                    <li><i class="fas fa-chevron-right"></i> Completely pre-vetted developer credentials</li>
+                    <li><i class="fas fa-chevron-right"></i> Strict quality audit and structural inspection protocols</li>
+                    <li><i class="fas fa-chevron-right"></i> VIP walkthroughs and construction-progress briefings</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Optimum Property and Gold Benefits -->
+        <div class="gold-benefits-panel">
+            <div class="gold-title-section">
+                <h3>Optimum Property with Profitable Benefits</h3>
+                <p>A structured program unlocking golden opportunities in premium residential holdings</p>
+            </div>
+            <div class="gold-cards-grid">
+                <div class="gold-card">
+                    <h4>Financial Dividends</h4>
+                    <ul>
+                        <li><i class="fas fa-shield-alt"></i> 10% property dividend on flat booking!</li>
+                        <li><i class="fas fa-shield-alt"></i> Loan and expert advice free!</li>
+                        <li><i class="fas fa-shield-alt"></i> Transparent wealth planning!</li>
+                    </ul>
+                </div>
+                <div class="gold-card">
+                    <h4>Regulatory & Service Protection</h4>
+                    <ul>
+                        <li><i class="fas fa-shield-alt"></i> 10-year RERA authorization security and benefits!</li>
+                        <li><i class="fas fa-shield-alt"></i> Defect liability service, purchase, and sale agreement!</li>
+                        <li><i class="fas fa-shield-alt"></i> Service-free home of your dreams!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Property segment -->
+        <div class="services-scrolling-block reverse" style="margin-bottom: 0;">
+            <div class="scrolling-img-container">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800" alt="Dream Home">
+            </div>
+            <div class="scrolling-desc">
+                <h3>Best Property with Wealth Benefits</h3>
+                <p>Get your dream home with exclusive benefits designed to preserve value over decades. Our team of experts will guide you through the process from the very start of the project to your eventual moving-in day.</p>
+                <ul class="scrolling-bullet-list">
+                    <li><i class="fas fa-chevron-right"></i> High-yield locations with secure resale profiles</li>
+                    <li><i class="fas fa-chevron-right"></i> Delivered dream with dividend</li>
+                    <li><i class="fas fa-chevron-right"></i> Round-the-clock personal assistance</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- ABOUT US PAGE VIEW -->
+<main id="aboutPage" class="dynamic-page">
+    <div class="about-wrapper">
+        <div class="about-main-title">
+            <h2>Our Vision, Mission & Promise</h2>
+            <p>We are a forward-looking advisory helping homeowners make conscious, data-backed decisions that serve as solid pillars for generational prosperity.</p>
+        </div>
+
+        <div class="about-visionary-row">
+            <div class="about-visionary-text">
+                <h3>About Prosify Homes</h3>
+                <p>Prosify is a modern real estate advisory and property solutions company based in Mumbai, India. We focus on helping individuals and families make confident property investment choices. Built on solid trusts, absolute transaction transparency, and long-term wealth creation, Prosify connects corporate and residential buyers with premium real estate opportunities designed to deliver secure homeownership alongside strong financial yields.</p>
+                <p>Our philosophy is centered on the principle that property acquisition should not be complex. Through structural diligence, thorough title verifications, and custom-tailored market profiling, we secure assets that appreciate steadily in value.</p>
+            </div>
+            <!-- Interactive multiple images layout -->
+            <div class="about-triple-showcase">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=600" alt="Apartment 1" class="triple-img-card">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600" alt="Apartment 2" class="triple-img-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600" alt="Apartment 3" class="triple-img-card">
+            </div>
+        </div>
+
+        <!-- Highly Polished Cards Layout for requested sections -->
+        <div class="about-polished-grid">
+            <div class="about-choose-card">
+                <h3>Why Choose Prosify?</h3>
+                <ul>
+                    <li><i class="fas fa-shield-alt"></i> Trusted & transparent advisory services</li>
+                    <li><i class="fas fa-city"></i> Access to quality real estate developments</li>
+                    <li><i class="fas fa-hand-holding-usd"></i> Customer-focused financial solutions</li>
+                    <li><i class="fas fa-chart-line"></i> Long-term investment value creation</li>
+                    <li><i class="fas fa-user-tie"></i> Professional & ethical business practices</li>
+                </ul>
+            </div>
+            <div class="about-compliance-card">
+                <h3>Advisory & Compliance Support</h3>
+                <p>We protect our buyers from potential delays and hidden clauses. Our legal and compliance experts verify structural land clearances, title records, and documentation to guarantee transparent handovers and completely secure transaction files.</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Timelines/Values Grid -->
+        <div class="about-interactive-timeline">
+            <div class="timeline-header">
+                <h3>Core Pillars & Corporate Structure</h3>
+            </div>
+            <div class="timeline-grid">
+                <div class="timeline-box">
+                    <h4>Our Mission</h4>
+                    <p>To transform property ownership into a smart wealth-building opportunity by helping clients secure high-potential residential investments in prime and emerging locations.</p>
+                </div>
+                <div class="timeline-box">
+                    <h4>Our Promise</h4>
+                    <p>We simplify property buying by offering professional advisory, financial assistance, verified project access, transparent transactions, and expert support from start to finish.</p>
+                </div>
+                <div class="timeline-box">
+                    <h4>Who We Serve</h4>
+                    <p>First-time home buyers, experienced investors, families seeking secure residential spaces, and individuals aiming to establish sound properties.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Integrations and Address Block -->
+        <div class="about-social-address-split">
+            <div class="about-address-column">
+                <h4>Office Address</h4>
+                blockquote>
+                    <strong>Prosify Real Estate Advisory</strong><br>
+                    Goddev Phatak Road<br>
+                    Bhayandar East, Mumbai<br>
+                    Maharashtra - 401105, India
+                </blockquote>
+                <p style="margin-top:20px; font-weight:500; font-size:0.9rem; color:#0066cc;"><i class="fas fa-phone-alt"></i> Telephone: 91678-91679</p>
+            </div>
+            <div class="about-socials-column">
+                <h4>Connect with Advisory Desk</h4>
+                <div class="social-buttons-stack">
+                    <a href="https://wa.me/919167891679" class="social-action-btn wa-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    <a href="https://web.facebook.com/page/283925357" class="social-action-btn fb-btn" target="_blank">
+                        <i class="fab fa-facebook-f"></i> Follow on Facebook
+                    </a>
+                    <a href="https://www.youtube.com/hello4home2245" class="social-action-btn yt-btn" target="_blank">
+                        <i class="fab fa-youtube"></i> Watch on YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Polished Capital Asset Call-to-Action -->
+        <div class="about-capital-box-polished">
+            <h3>Find Your Next Capital Asset Today</h3>
+            <p>For personalized assistance, call us at 91678-91679 — our team is ready to help you find the perfect property!</p>
+            <a href="tel:9167891679" class="promise-call-btn">CALL REPRESENTATIVE</a>
+        </div>
+    </div>
+</main>
+
+<!-- PROJECTS PAGE VIEW -->
+<main id="projectsPage" class="dynamic-page">
+    <div class="projects-wrapper">
+        <div class="projects-header">
+            <h2>Explore a Whole New World</h2>
+            <p>Select a category below to explore our verified high-potential real estate developments.</p>
+        </div>
+        
+        <div class="projects-tabs">
+            <button class="project-tab-btn active" onclick="filterProjects('all', this)">All Listings</button>
+            <button class="project-tab-btn" onclick="filterProjects('Residential', this)">Residential</button>
+            <button class="project-tab-btn" onclick="filterProjects('Commercial', this)">Commercial</button>
+            <button class="project-tab-btn" onclick="filterProjects('Land', this)">Land</button>
+        </div>
+
+        <div id="projectsGrid" class="projects-grid-list">
+            <!-- Javascript populates filtered items dynamically here -->
+        </div>
+    </div>
+</main>
+
+<!-- GALLERY PAGE VIEW -->
+<main id="galleryPage" class="dynamic-page">
+    <div class="gallery-wrapper">
+        <div class="gallery-header">
+            <h2>Our Portfolio Gallery</h2>
+            <p>A curated collection of visual landscapes, construction details, and premium residential spaces.</p>
+        </div>
+
+        <div class="gallery-grid-1to1">
+            <!-- Dynamic Tiles populated here from database [ssl.json] -->
+        </div>
+    </div>
+</main>
+
+<!-- SEARCH RESULTS PAGE VIEW -->
+<main id="searchResultsPage" class="dynamic-page">
+    <div class="search-results-wrapper">
+        <div class="search-results-header">
+            <h2 id="searchQueryTitle">Search Results</h2>
+        </div>
+        <div id="searchResultsContainer" class="search-results-grid">
+            <!-- Javascript populates matching items here -->
+        </div>
+    </div>
+</main>
+
+<!-- ANAROCK-INSPIRED PROJECT POPUP MODAL (theelite Style placement) [ssl.json] -->
+<div id="detailsModal" class="modal-overlay">
+    <div class="modal-content detailed-window">
+        <!-- Close Button -->
+        <span class="modal-close-btn" id="modalCloseBtn" onclick="closeProjectDetails()">&times;</span>
+        
+        <!-- Header Image Container (Hero Cover) -->
+        <div class="detailed-header-container">
+            <img id="detailHeaderImg" src="" alt="Project Header Banner">
+            <div class="detailed-banner-overlay">
+                <span id="detailBadge" class="project-card-badge shadow-sm">Residential</span>
+                <h2 id="detailTitle" class="text-3xl sm:text-5xl font-extrabold tracking-tight mt-3">Project Title</h2>
+                <p id="detailSubtitleLoc" class="text-sm sm:text-base font-medium opacity-90 mt-2 flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt"></i> <span>Bandra, Mumbai</span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Split Column Layout [ssl.json] -->
+        <div class="anarock-grid-container">
+            
+            <!-- Left Main Column (Detailed Sections) -->
+            <div class="anarock-left-column">
+                
+                <!-- Overview section -->
+                <div class="detail-overview-block">
+                    <h3 class="anarock-section-title">Overview</h3>
+                    <div id="detailRowsContainer" class="space-y-4">
+                        <!-- Javascript weaves images and text across alternate rows [ssl.json] -->
+                    </div>
+                </div>
+
+                <!-- Where Map split layout section [ssl.json] -->
+                <div class="detail-where-section">
+                    <h3 class="anarock-section-title">Where</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3.5">
+                            <p class="text-sm text-gray-800 leading-relaxed font-semibold flex items-center gap-2">
+                                <i class="fas fa-compass text-[#0066cc]"></i> 
+                                <span id="detailWhereLocation">Bandra, Mumbai</span>
+                            </p>
+                            <p class="text-xs text-gray-500 leading-relaxed font-light">
+                                Strategically centered within key infrastructure links, presenting outstanding connectivity to transit networks, commercial parks, and civic amenities.
+                            </p>
+                        </div>
+                        <div class="w-full h-64 rounded-xl overflow-hidden border border-gray-200 shadow-inner">
+                            <iframe id="detailWhereMap" class="w-full h-full border-0" src="" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amenities Block with Large Cards -->
+                <div class="detail-amenities-section" id="detailAmenitiesSection">
+                    <h3 class="anarock-section-title">Project Amenities</h3>
+                    <div class="amenities-anarock-grid" id="detailAmenitiesGrid">
+                        <!-- Dynamic cards rendered here [ssl.json] -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Sidebar Column (Sticky Action Card) [ssl.json] -->
+            <div class="anarock-right-column">
+                <div class="anarock-sticky-card">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider font-bold text-gray-400">Starting Price</span>
+                        <h4 id="sidebarPrice" class="text-2xl font-black text-gray-900 mt-1">₹ 4.5 Cr</h4>
+                    </div>
+
+                    <div class="border-t border-gray-100 pt-4 space-y-3.5">
+                        <div class="flex items-center justify-between text-xs font-semibold text-gray-600">
+                            <span>Configurations:</span>
+                            <span id="sidebarBhk" class="text-gray-900 font-bold">2, 3 BHK</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs font-semibold text-gray-600">
+                            <span>Market Status:</span>
+                            <span class="text-success font-bold">Vetted & Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Direct CTA actions button placement stack [ssl.json] -->
+                    <div class="border-t border-gray-100 pt-4 space-y-2.5">
+                        <a href="#" id="detailCtaPhone" class="sidebar-cta-btn sidebar-phone-btn">
+                            <i class="fas fa-phone-alt"></i> Call Advisor
+                        </a>
+                        <a href="#" id="detailCtaWa" target="_blank" class="sidebar-cta-btn sidebar-wa-btn">
+                            <i class="fab fa-whatsapp"></i> Send Inquiry
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- GLOBAL FOOTER -->
+<footer class="global-footer">
+    <div class="footer-split">
+        <div class="footer-left">
+            <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify Logo" class="footer-logo">
+            <p class="footer-about-text">At Prosify, we transform residential property decisions into long-term wealth assets. Built on trust, absolute transparency, and long-term financial security, we connect you with verified premium real estate opportunities designed to deliver secure homeownership and strong returns.</p>
+        </div>
+        <div class="footer-right">
+            <div class="footer-column">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Details</h4>
+                <p class="footer-contact-item"><i class="fas fa-map-marker-alt"></i> Goddev Phatak Road, Bhayandar East, Mumbai, Maharashtra - 401105, India</p>
+                <p class="footer-contact-item"><i class="fas fa-phone-alt"></i> 91678-91679</p>
+                <div class="footer-social-icons">
+                    <a href="https://wa.me/919167891679" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://web.facebook.com/page/283925357" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.youtube.com/hello4home2245" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Prosify Homes. All rights reserved. | Designed and Developed by <a href="https://ninsara.is-a.dev" target="_blank" style="color: inherit; text-decoration: none; font-weight: inherit; cursor: pointer;">Zeno Developers</a>
+    </div>
+</footer>
+
+<!-- FAB -->
+<button class="fab-btn" id="fabBtn" aria-label="Support chat"><i class="fas fa-headset"></i></button>
+
+<!-- CHATBOT WIDGET -->
+<div class="chatbot-widget" id="chatbotWidget">
+    <div class="chatbot-header">
+        <span>Customer Support</span>
+        <button class="chatbot-close" id="chatbotClose" aria-label="Close chat"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chatbot-body">
+        <iframe id="chatbotFrame" title="Chatbot" loading="lazy"></iframe>
+    </div>
+</div>
+
+<script>
+    // Hamburger Menu Toggle
+    const hamburger=document.getElementById('hamburger'),navMenu=document.getElementById('navMenu');
+    hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');navMenu.classList.toggle('active')});
+    document.querySelectorAll('#navMenu a').forEach(l=>l.addEventListener('click',()=>{hamburger.classList.remove('active');navMenu.classList.remove('active')}));
+
+    // Dynamic Router for SPA
+    function handleRouting() {
+        const hash = window.location.hash || '#home';
+        const landing = document.getElementById('landingPageContent');
+        const services = document.getElementById('servicesPage');
+        const about = document.getElementById('aboutPage');
+        const projects = document.getElementById('projectsPage');
+        const gallery = document.getElementById('galleryPage');
+        const searchResults = document.getElementById('searchResultsPage');
+
+        // Hide all pages first
+        landing.style.display = 'none';
+        services.style.display = 'none';
+        about.style.display = 'none';
+        projects.style.display = 'none';
+        gallery.style.display = 'none';
+        searchResults.style.display = 'none';
+
+        if (hash === '#services') {
+            services.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else if (hash === '#about') {
+            about.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else if (hash === '#projects') {
+            projects.style.display = 'block';
+            window.scrollTo(0, 0);
+            filterProjects('all'); 
+        } else if (hash === '#gallery') {
+            gallery.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else if (hash.startsWith('#search')) {
+            searchResults.style.display = 'block';
+            window.scrollTo(0, 0);
+        } else {
+            landing.style.display = 'block';
+            if (hash && hash !== '#home') {
+                const target = document.querySelector(hash);
+                if (target) {
+                    setTimeout(() => {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }, 50);
+                }
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }
+    }
+    window.addEventListener('hashchange', handleRouting);
+
+    // Global lists
+    let realProjects = [];
+    let galleryImages = [];
+
+    // GitHub repository identifiers
+    const REPO_OWNER = "qg7823gr23rb23ct81tvbtw34b6q3v43q46q48";
+    const REPO_NAME = "q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w";
+
+    // High resolution stock fallback images database [ssl.json]
+    const stockGalleryImages = [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=500",
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=500",
+        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=500",
+        "https://images.unsplash.com/photo-1582407947304-fd86f028f716?q=80&w=500",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=500",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=500",
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=500",
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=500",
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=500",
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=500",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=500", // construction
+        "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=500", // construction
+        "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=500", // architecture
+        "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?q=80&w=500", // construction
+        "https://images.unsplash.com/photo-1531834685032-c34bf0d84406?q=80&w=500", // build
+        "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=500", // room
+        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=500", // lounge
+        "https://images.unsplash.com/photo-1448630360428-6547212b6f40?q=80&w=500", // street
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=500", // office
+        "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=500"  // corporate
+    ];
+
+    // Helper to randomize lists with boundary loops
+    function shuffleAndDuplicate(arr, targetLength) {
+        let shuffled = [...arr].sort(() => 0.5 - Math.random());
+        while (shuffled.length < targetLength) {
+            shuffled = shuffled.concat([...shuffled].sort(() => 0.5 - Math.random()));
+        }
+        return shuffled.slice(0, targetLength);
+    }
+
+    // Dynamic color coding badges by project classification [ssl.json]
+    function getCategoryBadgeStyle(category) {
+        const cat = (category || "").toLowerCase().trim();
+        if (cat === "land") {
+            return "background: #ffd600; color: #000;";
+        } else if (cat === "commercial") {
+            return "background: #ef4444; color: #fff;";
+        } else { // Resident / Residential
+            return "background: #0066cc; color: #fff;";
+        }
+    }
+
+    // Dynamic media asset synchronizer [ssl.json]
+    async function loadGalleryAssets() {
+        try {
+            const res = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/ssl.json`);
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    const urls = data.map(item => item.url).filter(Boolean);
+                    if (urls.length >= 20) {
+                        // Sufficient catalog uploads: show exclusively from database [ssl.json]
+                        galleryImages = shuffleAndDuplicate(urls, 30);
+                    } else {
+                        // Less than 20 uploads: mix database with high res fallbacks [ssl.json]
+                        const combined = urls.concat(stockGalleryImages);
+                        galleryImages = shuffleAndDuplicate(combined, 30);
+                    }
+                } else {
+                    galleryImages = stockGalleryImages;
+                }
+            } else {
+                galleryImages = stockGalleryImages;
+            }
+        } catch (e) {
+            console.warn("Failed to synchronize custom catalog file. Falling back to stock references.", e);
+            galleryImages = stockGalleryImages;
+        }
+        initGalleryUI();
+    }
+
+    // Dynamically insert image trains and gallery page slots
+    function initGalleryUI() {
+        // Train 1 Carousel Rows
+        const train1 = document.getElementById('train1');
+        if (train1) {
+            const slice1 = galleryImages.slice(0, 10);
+            train1.innerHTML = slice1.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('') + 
+                              slice1.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('');
+        }
+        // Train 2 Carousel Rows
+        const train2 = document.getElementById('train2');
+        if (train2) {
+            const slice2 = galleryImages.slice(10, 20);
+            train2.innerHTML = slice2.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('') + 
+                              slice2.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('');
+        }
+        // Train 3 Carousel Rows
+        const train3 = document.getElementById('train3');
+        if (train3) {
+            const slice3 = galleryImages.slice(20, 30);
+            train3.innerHTML = slice3.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('') + 
+                              slice3.map(img => `<img src="${img}" alt="Landscape Asset" loading="lazy">`).join('');
+        }
+        // Portfolio Main Gallery Page View Grid
+        const galleryGrid = document.querySelector('.gallery-grid-1to1');
+        if (galleryGrid) {
+            galleryGrid.innerHTML = galleryImages.map(img => `
+                <div class="gallery-tile"><img src="${img}" alt="Landscape Asset" loading="lazy"></div>
+            `).join('');
+        }
+    }
+
+    // Sequential Scan Load Function from raw.githubusercontent.com CDN
+    async function loadGitHubData() {
+        try {
+            let fetchedList = [];
+            let index = 0;
+            let active = true;
+
+            while (active) {
+                const fileName = index === 0 ? "landdata.json" : `landdata${index}.json`;
+                const url = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${fileName}`;
+                
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (Array.isArray(data)) {
+                            fetchedList = fetchedList.concat(data);
+                            index++;
+                        } else {
+                            active = false;
+                        }
+                    } else {
+                        active = false;
+                    }
+                } catch (err) {
+                    active = false;
+                }
+            }
+
+            // Normalizing data structures mapping coordinates and attributes
+            realProjects = fetchedList.map((item, idx) => {
+                const id = idx + 1;
+                const title = item.title || "Untitled Property";
+                const bhks = Array.isArray(item.bhk) ? item.bhk.join(', ') : "";
+                const bhkArray = Array.isArray(item.bhk) ? item.bhk : [];
+                const priceVal = item.price_label || (item.price ? `₹ ${item.price}` : "Price on Request");
+                
+                const locationStr = `${item.location?.locality || ''}, ${item.location?.city || ''}, ${item.location?.state || ''}`
+                    .trim()
+                    .replace(/^,\s*|,\s*$/g, '')
+                    .replace(/,\s*,/g, ',');
+
+                const defaultDesc = `Exquisite property situated in a premium location at ${locationStr || 'Mumbai'}. Boasting outstanding layouts, modern construction configurations (${bhks || 'Premium layout'}), and fully functional infrastructure setups.`;
+                
+                return {
+                    id: id,
+                    title: title,
+                    bhk: bhkArray,
+                    location: locationStr || "Mumbai, India",
+                    category: item.category || "Residential",
+                    description: item.description || defaultDesc,
+                    price: priceVal,
+                    img: item.header_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=600",
+                    images: Array.isArray(item.images) ? item.images : [],
+                    amenities: Array.isArray(item.amenities) ? item.amenities : [],
+                    publish_status: item.publish_status || "Published",
+                    brochure: item.brochure || "",
+                    latitude: item.location?.latitude || 26.8467,
+                    longitude: item.location?.longitude || 80.9462
+                };
+            }).filter(p => p.publish_status !== "Hidden");
+
+            // Safe fallback dataset in case remote repository is empty
+            if (realProjects.length === 0) {
+                realProjects = [
+                    { id: 1, title: 'Prosify Heights', location: 'Bandra, Mumbai, India', category: 'Residential', description: 'Luxury 3 BHK high-rise residences with panoramic sunset sky decks, smart home automation, and infinity pool access.', price: 'Rs. 4.5 Cr onwards', img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=600', images: [], amenities: [], publish_status: "Published", latitude: 19.0596, longitude: 72.8295 },
+                    { id: 2, title: 'Prosify Oasis', location: 'Thane, Mumbai, India', category: 'Residential', description: 'Sustainable green developments featuring rainwater harvesting grids, eco-residences, and private garden layouts.', price: 'Rs. 1.8 Cr onwards', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=600', images: [], amenities: [], publish_status: "Published", latitude: 19.2183, longitude: 72.9781 }
+                ];
+            }
+
+            renderHomeProjects();
+            filterProjects('all');
+
+        } catch (e) {
+            console.error("An error occurred during database fetch: ", e);
+        }
+    }
+
+    // Populate Featured Properties on homepage with responsive bounds constraints
+    function renderHomeProjects() {
+        const grid = document.getElementById('homeProjectsGrid');
+        if (!grid) return;
+
+        // Slice first 3 real projects (no more than three)
+        const featured = realProjects.slice(0, 3);
+        const count = featured.length;
+
+        // Clear and recalculate grids
+        grid.className = "home-projects-grid";
+        if (count === 1) {
+            grid.classList.add("cols-1");
+        } else if (count === 2) {
+            grid.classList.add("cols-2");
+        } else {
+            grid.classList.add("cols-3");
+        }
+        
+        grid.innerHTML = featured.map(p => `
+            <div class="project-item-card" style="box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <img src="${p.img}" alt="${p.title}" loading="lazy">
+                <div class="project-card-body">
+                    <div>
+                        <span class="project-card-badge shadow-sm" style="${getCategoryBadgeStyle(p.category)}">${p.category}</span>
+                        <h3>${p.title}</h3>
+                        <p style="font-size:0.75rem; color:#888; margin-bottom:10px;"><i class="fas fa-map-marker-alt"></i> ${p.location}</p>
+                        <p>${p.description}</p>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-card-price">${p.price}</span>
+                        <button class="project-card-btn" onclick="openProjectDetails(${p.id})">See Details</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Projects Grid view filtering logic
+    function filterProjects(cat, btnElement) {
+        const grid = document.getElementById('projectsGrid');
+        if(!grid) return;
+
+        if(btnElement) {
+            document.querySelectorAll('.project-tab-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
+        
+        const filtered = cat === 'all' ? realProjects : realProjects.filter(p => p.category === cat);
+        
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div style="text-align:center; padding: 40px; grid-column: 1/-1; font-weight: 300;">No developments found in category "${cat}".</div>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(p => `
+            <div class="project-item-card">
+                <img src="${p.img}" alt="${p.title}" loading="lazy">
+                <div class="project-card-body">
+                    <div>
+                        <span class="project-card-badge shadow-sm" style="${getCategoryBadgeStyle(p.category)}">${p.category}</span>
+                        <h3>${p.title}</h3>
+                        <p style="font-size:0.75rem; color:#888; margin-bottom:10px;"><i class="fas fa-map-marker-alt"></i> ${p.location}</p>
+                        <p>${p.description}</p>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-card-price">${p.price}</span>
+                        <button class="project-card-btn" onclick="openProjectDetails(${p.id})">See Details</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Execute Global Query Search 
+    function executeSearch(query) {
+        if (!query) return;
+        const normalized = query.toLowerCase().trim();
+        const results = realProjects.filter(p => 
+            p.title.toLowerCase().includes(normalized) || 
+            p.location.toLowerCase().includes(normalized) || 
+            p.description.toLowerCase().includes(normalized) ||
+            p.category.toLowerCase().includes(normalized)
+        );
+
+        const container = document.getElementById('searchResultsContainer');
+        const queryTitle = document.getElementById('searchQueryTitle');
+        queryTitle.textContent = `Search Results for "${query}"`;
+
+        if (results.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding: 60px 20px; font-weight:300; grid-column: 1/-1;">No projects found matching "${query}".</div>`;
+        } else {
+            container.innerHTML = results.map(p => `
+                <div style="border:1px solid #eee; background:#fff; overflow:hidden; border-radius:4px; display:flex; flex-direction:column;">
+                    <img src="${p.img}" alt="${p.title}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:20px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <span class="project-card-badge shadow-sm" style="${getCategoryBadgeStyle(p.category)}">${p.category}</span>
+                            <h3 style="font-size:1.15rem; font-weight:700; margin:8px 0; color:#000;">${p.title}</h3>
+                            <p style="font-size:0.8rem; color:#666; margin-bottom:12px;"><i class="fas fa-map-marker-alt" style="color:#0066cc;"></i> ${p.location}</p>
+                            <p style="font-size:0.85rem; color:#444; font-weight:300; line-height:1.6; margin-bottom:15px; height:60px; overflow:hidden;">${p.description}</p>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f2f2f2; padding-top:15px;">
+                            <span style="font-weight:700; font-size:0.95rem; color:#000;">${p.price}</span>
+                            <button class="project-card-btn" onclick="openProjectDetails(${p.id})">See Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        window.location.hash = `#search?q=${encodeURIComponent(query)}`;
+    }
+
+    // Dynamic Font Awesome class helper based on database icon input
+    function getFontAwesomeClass(iconName) {
+        if (!iconName) return "fa-solid fa-circle-check";
+        const name = iconName.toLowerCase().trim();
+        
+        if (name.includes("pool") || name.includes("swim")) return "fa-solid fa-person-swimming";
+        if (name.includes("gym") || name.includes("dumbbell") || name.includes("fitness")) return "fa-solid fa-dumbbell";
+        if (name.includes("park") || name.includes("garden") || name.includes("tree") || name.includes("lawn")) return "fa-solid fa-tree";
+        if (name.includes("car") || name.includes("parking") || name.includes("garage")) return "fa-solid fa-car-rear";
+        if (name.includes("security") || name.includes("guard") || name.includes("shield")) return "fa-solid fa-shield-halved";
+        if (name.includes("wifi") || name.includes("internet") || name.includes("signal")) return "fa-solid fa-wifi";
+        if (name.includes("water") || name.includes("tap") || name.includes("droplet")) return "fa-solid fa-droplet";
+        if (name.includes("power") || name.includes("generator") || name.includes("bolt")) return "fa-solid fa-bolt";
+        if (name.includes("lift") || name.includes("elevator")) return "fa-solid fa-elevator";
+        if (name.includes("club") || name.includes("hall") || name.includes("community")) return "fa-solid fa-users";
+        if (name.includes("run") || name.includes("jog") || name.includes("track")) return "fa-solid fa-person-running";
+        if (name.includes("camera") || name.includes("cctv") || name.includes("video")) return "fa-solid fa-video";
+        if (name.includes("fire") || name.includes("extinguish") || name.includes("alarm")) return "fa-solid fa-fire-extinguisher";
+        if (name.includes("kid") || name.includes("play") || name.includes("child")) return "fa-solid fa-child-reaching";
+        if (name.includes("star") || name.includes("premium")) return "fa-solid fa-star";
+        
+        return "fa-solid fa-circle-check";
+    }
+
+    // Load Single Project Template and Open Details Window (Anarock Style) [ssl.json]
+    function openProjectDetails(id) {
+        const project = realProjects.find(p => p.id === id);
+        if (!project) return;
+
+        // Reset values & load header banner
+        document.getElementById('detailHeaderImg').src = project.img;
+        
+        // Elite Overlay Header Badging
+        const badgeNode = document.getElementById('detailBadge');
+        badgeNode.innerText = project.category;
+        badgeNode.style = getCategoryBadgeStyle(project.category);
+
+        document.getElementById('detailTitle').innerText = project.title;
+        document.getElementById('detailSubtitleLoc').querySelector('span').innerText = project.location;
+
+        // Sidebar card details sync [ssl.json]
+        document.getElementById('sidebarPrice').innerText = project.price;
+        const configBhk = Array.isArray(project.bhk) && project.bhk.length > 0 ? project.bhk.join(', ') : "Premium Layout";
+        document.getElementById('sidebarBhk').innerText = configBhk;
+
+        // Dynamic multi-row text description side-by-side with images [ssl.json]
+        const detailRows = document.getElementById('detailRowsContainer');
+        const descWords = project.description.split(" ");
+        const blockLength = Math.ceil(descWords.length / 2);
+        const textBlock1 = descWords.slice(0, blockLength).join(" ");
+        const textBlock2 = descWords.slice(blockLength).join(" ");
+
+        let rowsHtml = "";
+        if (project.images && project.images.length > 0) {
+            project.images.forEach((url, i) => {
+                const textParagraph = i === 0 ? textBlock1 : (i === 1 ? textBlock2 : "Optimized layout elements engineered with precision, maximizing natural solar lighting, clean drafts, and open private terraces.");
+                if (i % 2 === 0) {
+                    rowsHtml += `
+                        <div class="flex flex-col md:flex-row gap-8 items-center py-6 border-b border-gray-100 last:border-0">
+                            <div class="flex-1 space-y-2">
+                                <p class="text-sm text-gray-600 leading-relaxed font-light">${textParagraph}</p>
+                            </div>
+                            <div class="flex-1 w-full h-72 rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                                <img src="${url}" class="w-full h-full object-cover" alt="Interior asset">
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    rowsHtml += `
+                        <div class="flex flex-col md:flex-row-reverse gap-8 items-center py-6 border-b border-gray-100 last:border-0">
+                            <div class="flex-1 space-y-2">
+                                <p class="text-sm text-gray-600 leading-relaxed font-light">${textParagraph}</p>
+                            </div>
+                            <div class="flex-1 w-full h-72 rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                                <img src="${url}" class="w-full h-full object-cover" alt="Interior asset">
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        } else {
+            rowsHtml = `<p class="text-sm text-gray-600 leading-relaxed font-light">${project.description}</p>`;
+        }
+        detailRows.innerHTML = rowsHtml;
+
+        // "Where" Iframe Map Integration side-by-side [ssl.json]
+        document.getElementById('detailWhereLocation').innerText = project.location;
+        const mapsIframe = document.getElementById('detailWhereMap');
+        if (mapsIframe && project.latitude && project.longitude) {
+            mapsIframe.src = `https://maps.google.com/maps?q=${project.latitude},${project.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+        }
+
+        // Dynamic Font Awesome Amenities render with BIG icon cards [ssl.json]
+        const amenitiesContainer = document.getElementById('detailAmenitiesGrid');
+        const amenitiesSection = document.getElementById('detailAmenitiesSection');
+        
+        if (project.amenities && project.amenities.length > 0) {
+            amenitiesSection.style.display = "block";
+            amenitiesContainer.innerHTML = project.amenities.map(a => `
+                <div class="amenity-anarock-card">
+                    <i class="${getFontAwesomeClass(a.icon)}"></i>
+                    <span>${a.name}</span>
+                </div>
+            `).join('');
+        } else {
+            amenitiesSection.style.display = "none";
+        }
+
+        // Set dynamic Inquiry CTA Actions links [ssl.json]
+        const rawPhone = "9167891679";
+        document.getElementById('detailCtaPhone').href = `tel:${rawPhone}`;
+        
+        const professionalMsg = `Hello, I am interested in exploring further details regarding the ${project.title} project. Could you please share more information, pricing tables, and brochures regarding this listing?`;
+        document.getElementById('detailCtaWa').href = `https://wa.me/919167891679?text=${encodeURIComponent(professionalMsg)}`;
+
+        // Modal triggers
+        const modal = document.getElementById('detailsModal');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('open');
+        }, 10);
+    }
+
+    function closeProjectDetails() {
+        const modal = document.getElementById('detailsModal');
+        modal.classList.remove('open');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    // Search Trigger Listeners
+    document.getElementById('desktopSearchBtn').addEventListener('click', () => {
+        const query = document.getElementById('desktopSearchInput').value;
+        executeSearch(query);
+    });
+    document.getElementById('desktopSearchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') executeSearch(document.getElementById('desktopSearchInput').value);
+    });
+    document.getElementById('mobileSearchBtn').addEventListener('click', () => {
+        const query = document.getElementById('mobileSearchInput').value;
+        executeSearch(query);
+    });
+    document.getElementById('mobileSearchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') executeSearch(document.getElementById('mobileSearchInput').value);
+    });
+
+    // Hero Carousel Logic
+    const slides=document.querySelectorAll('.carousel-slide'),dots=document.querySelectorAll('.carousel-dot'),arrowLeft=document.getElementById('arrowLeft'),arrowRight=document.getElementById('arrowRight');
+    let cur=0,autoPlay;
+    function updateTheme(i){const t=slides[i].getAttribute('data-theme');arrowLeft.className='carousel-arrow carousel-arrow-left arrow-'+(t==='dark'?'dark':'light');arrowRight.className='carousel-arrow carousel-arrow-right arrow-'+(t==='dark'?'dark':'light');dots.forEach(d=>{d.classList.remove('dot-dark');if(t==='dark')d.classList.add('dot-dark')})}
+    function goTo(i){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=i;if(cur>=slides.length)cur=0;if(cur<0)cur=slides.length-1;slides[cur].classList.add('active');dots[cur].classList.add('active');updateTheme(cur)}
+    function next(){goTo(cur+1)}function prev(){goTo(cur-1)}
+    function startAuto(){autoPlay=setInterval(next,5000)}function resetAuto(){clearInterval(autoPlay);startAuto()}
+    arrowRight.addEventListener('click',()=>{next();resetAuto()});arrowLeft.addEventListener('click',()=>{prev();resetAuto()});
+    dots.forEach(d=>d.addEventListener('click',()=>{goTo(parseInt(d.dataset.index));resetAuto()}));
+    let tsx=0;const cc=document.querySelector('.carousel-container');
+    cc.addEventListener('touchstart',e=>{tsx=e.changedTouches[0].screenX},{passive:true});
+    cc.addEventListener('touchend',e=>{const d=tsx-e.changedTouches[0].screenX;if(Math.abs(d)>50){d>0?next():prev();resetAuto()}},{passive:true});
+    updateTheme(0);startAuto();
+
+    // Testimonials Carousel Controls
+    const tTrack=document.getElementById('testimonialsTrack'),tDots=document.querySelectorAll('.testimonial-nav-btn'),tPrev=document.getElementById('testPrev'),tNext=document.getElementById('testNext');
+    let tCur=0;const tTotal=3;let tAuto;
+    function goToT(i){if(i>=tTotal)i=0;if(i<0)i=tTotal-1;tCur=i;tTrack.style.transform=`translateX(-${tCur*100}%)`;tDots.forEach(d=>d.classList.remove('active'));tDots[tCur].classList.add('active')}
+    tNext.addEventListener('click',()=>{goToT(tCur+1);resetTAuto()});tPrev.addEventListener('click',()=>{goToT(tCur-1);resetTAuto()});
+    tDots.forEach(d=>d.addEventListener('click',()=>{goToT(parseInt(d.dataset.index));resetTAuto()}));
+    function startTAuto(){tAuto=setInterval(()=>goToT(tCur+1),6000)}function resetTAuto(){clearInterval(tAuto);startTAuto()}
+    let ttsx=0;const tc=document.querySelector('.testimonials-carousel');
+    tc.addEventListener('touchstart',e=>{ttsx=e.changedTouches[0].screenX},{passive:true});
+    tc.addEventListener('touchend',e=>{const d=ttsx-e.changedTouches[0].screenX;if(Math.abs(d)>50){d>0?goToT(tCur+1):goToT(tCur-1);resetTAuto()}},{passive:true});
+    startTAuto();
+
+    // FAB + Chatbot
+    const fabBtn=document.getElementById('fabBtn'),chatbotWidget=document.getElementById('chatbotWidget'),chatbotClose=document.getElementById('chatbotClose'),chatbotFrame=document.getElementById('chatbotFrame');
+    const chatbotURL='https://qg7823gr23rb23ct81tvbtw34b6q3v43q46q48.github.io/q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w/qh923f3578qv635c26v7cr34qvbq23v56ct6q2357tbqi76vtcqni2635tq23v75q27v9nq23t3q67v73tv5n7q296qt7w5vq279ctnt76wwtncc6t5vq9236t5n6q753tvqn6v5tq68T35N89TN6835vw346w4.html';
+    let chatbotLoaded=false;
+    fabBtn.addEventListener('click',()=>{
+        chatbotWidget.classList.toggle('open');
+        if(!chatbotLoaded){chatbotFrame.src=chatbotURL;chatbotLoaded=true}
+    });
+    chatbotClose.addEventListener('click',()=>{chatbotWidget.classList.remove('open')});
+
+    // Page Load & Routing Listeners
+    window.addEventListener('load', () => {
+        handleRouting();
+        loadGitHubData();
+        loadGalleryAssets(); // Triggers sync of gallery directory base [ssl.json]
+    });
+</script>
+
+</body> </html>
