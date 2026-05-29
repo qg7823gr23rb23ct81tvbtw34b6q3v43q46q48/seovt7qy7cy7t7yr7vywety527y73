@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prosify - Affiliate Partner Desk</title>
+
+    <!-- Tailwind CSS (Material 3 Theme Palette) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0066cc',
+                        accent: '#ffd600',
+                        surface: '#ffffff',
+                        surfaceVariant: '#f9f9f9',
+                        outline: '#e2e8f0'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Suppress browser tap/click highlighting */
+        *, *::before, *::after {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-focus-ring-color: transparent !important;
+            outline: none !important;
+        }
+        *:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+    
+    <!-- IMMEDIATE LOCALSTORAGE AUTHENTICATION LOCK GATE -->
+    <script>
+        (function() {
+            const localDataRaw = localStorage.getItem('affiliateData');
+            const localStatus = localStorage.getItem('affiliateStatus');
+            if (!localDataRaw || localStatus !== 'accepted') {
+                window.location.replace("https://prosify.in");
+            }
+        })();
+    </script>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800">
+
+    <!-- ORIGINAL BRAND TOP HEADER -->
+    <header class="bg-accent h-[85px] px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-40">
+        <div class="flex items-center gap-3">
+            <a href="https://prosify.in">
+                <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify Logo" class="h-14 w-auto object-contain brightness-0">
+            </a>
+            <span class="text-xs font-extrabold text-black uppercase tracking-widest border-l-2 border-black/30 pl-3 hidden sm:inline-block">Partner Desk</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="tel:9167891679" class="flex items-center gap-2 text-black font-extrabold text-xs sm:text-sm tracking-wide">
+                <span class="material-symbols-outlined text-md">call</span>
+                <span>91678-91679</span>
+            </a>
+            <button onclick="handleLogout()" class="text-xs bg-black text-white hover:bg-slate-900 px-4 py-2 rounded-full font-bold shadow-sm transition">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 md:px-6 py-8 space-y-8">
+        
+        <!-- Welcome banner -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-outline shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <span class="text-[10px] uppercase tracking-wider font-extrabold bg-primary/10 text-primary px-3 py-1 rounded-full">Authorized Affiliate Partner</span>
+                <h2 class="text-2xl font-black tracking-tight mt-3 text-slate-900">Hello, <span id="partnerFirstName">Partner</span>!</h2>
+                <p class="text-xs text-slate-500 font-medium mt-1">Welcome back to your partner program. Share project links to secure continuous wealth gains.</p>
+            </div>
+            <div class="flex flex-col gap-1 sm:text-right">
+                <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Partner ID</span>
+                <span id="partnerIdBadge" class="text-lg font-black text-primary font-mono select-all">AAA-00000</span>
+            </div>
+        </div>
+
+        <!-- Real-time Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Views Card -->
+            <div class="bg-white rounded-2xl p-6 border border-outline shadow-sm flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900" id="statViews">0</h3>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">Total Link Clicks</p>
+                </div>
+                <div class="bg-blue-50 text-blue-600 p-3 rounded-2xl">
+                    <span class="material-symbols-outlined text-2xl">visibility</span>
+                </div>
+            </div>
+
+            <!-- Customer Attention Card -->
+            <div class="bg-white rounded-2xl p-6 border border-outline shadow-sm flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900" id="statAttention">0</h3>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">Customer Attention</p>
+                </div>
+                <div class="bg-purple-50 text-purple-600 p-3 rounded-2xl">
+                    <span class="material-symbols-outlined text-2xl">contact_support</span>
+                </div>
+            </div>
+
+            <!-- Links Generated Card -->
+            <div class="bg-white rounded-2xl p-6 border border-outline shadow-sm flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900" id="statLinks">0</h3>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">Affiliation Links Made</p>
+                </div>
+                <div class="bg-emerald-50 text-emerald-600 p-3 rounded-2xl">
+                    <span class="material-symbols-outlined text-2xl">link</span>
+                </div>
+            </div>
+
+            <!-- Rotating Earning Tips Carousel Card -->
+            <div class="bg-accent/10 border border-accent/20 rounded-2xl p-5 flex flex-col justify-between h-32 relative overflow-hidden">
+                <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Earning Insights</p>
+                    <p id="insightTipText" class="text-xs text-slate-700 font-medium leading-relaxed mt-1.5 line-clamp-3">Loading random marketing tips...</p>
+                </div>
+                <button onclick="rotateTip()" class="absolute bottom-3 right-3 text-slate-500 hover:text-black transition" title="Next Tip">
+                    <span class="material-symbols-outlined text-md">autorenew</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Secondary Section: Profile Details & Dynamic Commission Ledger -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Affiliate profile metadata panel -->
+            <div class="bg-white rounded-3xl p-6 border border-outline shadow-sm lg:col-span-2 space-y-6">
+                <h3 class="text-md font-bold text-slate-900 border-b border-outline pb-3 uppercase tracking-wider">Affiliate Profile Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-600">
+                    <div>
+                        <span class="text-slate-400 block mb-1">Full Name</span>
+                        <span id="profName" class="text-slate-950 font-bold">N/A</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block mb-1">Email Address</span>
+                        <span id="profEmail" class="text-slate-950 font-bold">N/A</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block mb-1">WhatsApp Mobile</span>
+                        <span id="profPhone" class="text-slate-950 font-bold">N/A</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block mb-1">Program Status</span>
+                        <span class="text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full font-bold">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Commissions Ledger (Upgradable from admin side) -->
+            <div class="bg-white rounded-3xl p-6 border border-outline shadow-sm flex flex-col justify-between gap-6">
+                <div>
+                    <h3 class="text-md font-bold text-slate-900 border-b border-outline pb-3 uppercase tracking-wider">Financial Status</h3>
+                    <div class="mt-4 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-bold uppercase">Total Earnings</span>
+                            <!-- Dynamic Earnings node destination [Earnings text payload] -->
+                            <span id="ledgerEarnings" class="text-lg font-black text-slate-950">Calculating...</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-bold uppercase">Active Commission</span>
+                            <!-- Dynamic Commission percentage destination [Commission percent payload] -->
+                            <span id="ledgerCommission" class="text-sm font-black text-primary">Calculating...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-[11px] text-slate-400 leading-relaxed font-semibold">
+                    <span class="material-symbols-outlined text-xs inline-block align-middle mr-1 text-slate-500">info</span>
+                    Earnings are verified and credited directly to your bank account after client property agreements are finalized.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Dynamic Projects Link Maker Panel -->
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 tracking-tight">Create Links from Projects</h3>
+                    <p class="text-xs text-slate-400 font-medium">Generate custom, pre-vetted affiliate links for these 5 random catalog listings.</p>
+                </div>
+                <button onclick="syncDeskCatalog()" class="text-xs text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full border border-primary/20 transition flex items-center gap-1 font-bold">
+                    <span class="material-symbols-outlined text-xs">refresh</span> Shuffle Projects
+                </button>
+            </div>
+
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 5 random projects are rendered here -->
+                <div class="col-span-full py-12 text-center text-xs text-slate-500 font-medium">
+                    <div class="animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent mx-auto mb-3"></div>
+                    <span>Scrutinizing project inventory...</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Material 3 Custom Link Generator Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden" onclick="closeShareModal()">
+        <div class="bg-white max-w-lg w-full rounded-[28px] overflow-hidden shadow-2xl p-6 sm:p-8 flex flex-col gap-6" onclick="event.stopPropagation()">
+            
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 leading-tight">Partner Link Generated</h3>
+                    <p class="text-xs text-slate-400 mt-1 font-medium">Pre-vetted copy and caption created successfully.</p>
+                </div>
+                <button onclick="closeShareModal()" class="text-slate-400 hover:text-black">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Project Card Preview -->
+            <div class="bg-slate-50 border border-outline rounded-2xl p-4 flex gap-4 items-center">
+                <img id="modalProjImg" src="" alt="Project" class="w-16 h-16 rounded-xl object-cover border border-outline">
+                <div class="overflow-hidden">
+                    <h4 id="modalProjTitle" class="text-sm font-bold text-slate-900 truncate">Project Name</h4>
+                    <p id="modalProjLoc" class="text-[11px] text-slate-400 truncate mt-0.5">Location</p>
+                    <p id="modalProjPrice" class="text-xs font-bold text-primary mt-1">Starting Price</p>
+                </div>
+            </div>
+
+            <!-- Share Benefits Info Panel -->
+            <div class="bg-primary/5 rounded-2xl p-4 border border-primary/10">
+                <h4 class="text-xs font-bold text-primary flex items-center gap-1.5 uppercase tracking-wider mb-2">
+                    <span class="material-symbols-outlined text-sm">handshake</span> Partner Commission Benefits
+                </h4>
+                <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
+                    • Leads directed via this specific link are bound permanently to your Partner ID.<br>
+                    • Complete client handovers receive full, un-capped financial payouts immediately upon property registration.
+                </p>
+            </div>
+
+            <!-- Link Display Box -->
+            <div class="space-y-2">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Custom Referral URL</label>
+                <div class="flex gap-2">
+                    <input type="text" id="referralUrlInput" readonly class="flex-grow bg-slate-50 border border-outline rounded-xl py-3 px-4 text-xs font-mono text-primary select-all">
+                    <button onclick="copyReferralLink()" class="bg-primary text-white hover:bg-opacity-95 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition shadow-sm" title="Copy URL">
+                        <span class="material-symbols-outlined text-md">content_copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Randomized Catchy Captions / Mobile Fast-Share sheet -->
+            <div class="space-y-2">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Randomized High-Conversion Caption</label>
+                <textarea id="modalCaptionArea" rows="4" class="w-full bg-slate-50 border border-outline rounded-xl py-3 px-4 text-xs leading-relaxed font-semibold text-slate-700 resize-none select-all" readonly></textarea>
+                <span class="text-[10px] text-slate-400 block font-medium">Perfect for immediate copy-pasting to Facebook, WhatsApp Status, or Instagram.</span>
+            </div>
+
+            <!-- Native Share Button for Mobile -->
+            <div id="mobileShareActionBlock" class="hidden">
+                <button onclick="triggerMobileShareSheet()" class="w-full bg-accent text-black hover:bg-opacity-95 font-bold text-xs uppercase tracking-widest py-4 rounded-xl flex items-center justify-center gap-2 transition shadow">
+                    <span class="material-symbols-outlined text-md">share</span> Fast Social Share
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="bg-slate-900 text-slate-500 text-xs border-t border-slate-800 flex-shrink-0">
+        <div class="max-w-7xl w-full mx-auto px-4 md:px-6 py-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify Logo" class="h-10 w-auto object-contain brightness-0 invert opacity-60">
+                <span class="text-[10px] uppercase font-bold tracking-widest border-l border-slate-800 pl-3">Affiliate Desk</span>
+            </div>
+            <div class="flex items-center gap-1 text-[10px]">
+                <span>Designed and Developed by</span>
+                <a href="https://ninsara.is-a.dev" target="_blank" class="font-bold text-primary hover:underline">Zeno Developers</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DESK LOGIC CORE SCRIPT -->
+    <script>
+        // Rotating tips & tricks dataset
+        const MARKETING_TIPS = [
+            "💡 Share on WhatsApp Status: Over 70% of successful real estate leads come directly from WhatsApp Status updates. Post a stunning photo of the property with your custom link!",
+            "💡 Target Local Groups: Share your custom affiliate links inside local community Facebook groups or apartment resident association threads looking for trusted recommendations.",
+            "💡 Highlight the RERA Guarantee: Buyers love security. Always mention that Prosify projects are 100% RERA-cleared and pre-vetted by our corporate legal advisory desk.",
+            "💡 Leverage Personal Walks: When sharing a link, add a personal touch like: 'I reviewed this property layout myself and the space allocation for the price is highly competitive.'",
+            "💡 Offer Direct Call Assistance: Remind prospective buyers that clicking your link connects them directly with Prosify Sales Partners who handle all bank loan and document support at no cost.",
+            "💡 Share on Facebook Market groups: Copy the custom project link and use the pre-generated randomized caption directly inside Facebook community pages seeking listings!"
+        ];
+
+        // Multilingual randomized high-conversion social captions dataset
+        const SHARABLE_CAPTIONS = [
+            "🏡 Looking for your dream home? Check out this highly recommended, verified luxury listing on Prosify! Secure RERA clearance, high resale yield, and exclusive partner benefits. Click here to explore now: [LINK]",
+            "✨ Exclusive Property Alert! I highly recommend checking out this gorgeous development. RERA-vetted, prime connectivity, and complete title clearance. Don't miss this opportunity: [LINK]",
+            "🚀 Ready to make a smart real estate move? Here is an exceptional property I handpicked for its unbeatable value and long-term appreciation. View full details here: [LINK]",
+            "🌟 Finding a trusted home in Mumbai is now easier than ever. Check out this premium listing with secure amenities, ready possession, and direct advisor support: [LINK]",
+            "🏡 क्या आप अपने सपनों का घर ढूंढ रहे हैं? Prosify पर इस सत्यापित लक्जरी लिस्टिंग को देखें! सुरक्षित रेरा मंजूरी, उच्च पुनर्विक्रय मूल्य, और विशेष लाभ। एक्सप्लोर करने के लिए यहां क्लिक करें: [LINK]",
+            "✨ प्रॉपर्टी अलर्ट! मैं इस खूबसूरत रियल एस्टेट प्रोजेक्ट की अत्यधिक सिफारिश करता हूं। पूर्ण टाइटल क्लियरेंस और बेहतरीन कनेक्टिविटी। इस अवसर को न चूकें: [LINK]",
+            "🏡 உங்கள் கனவு இல்லத்தைத் தேடுகிறீர்களா? பிராசிஃபை (Prosify) தளத்தில் சரிபார்க்கப்பட்ட இந்த சொகுசு வீட்டைப் பாருங்கள்! சிறந்த வாஸ்து வடிவமைப்பு மற்றும் தள்ளுபடி முன்பண வாய்ப்புகள். இப்போதே பார்க்க கிளிக் செய்க: [LINK]",
+            "✨ பிரத்யேக சொத்து அறிவிப்பு! இந்த அற்புதமான அடுக்குமாடி குடியிருப்பை நான் பரிந்துரைக்கிறேன். சிறந்த மெட்ரோ இணைப்பு மற்றும் அனைத்து ரெரா (RERA) சான்றிதழ்களும் கொண்டது. இந்த பொன்னான வாய்ப்பை தவறவிடாதீர்கள்: [LINK]"
+        ];
+
+        let activeAffiliate = null;
+        let activeProjectsList = [];
+        let activeSelectedProject = null;
+
+        // Initialize Partner Desk on Load
+        window.addEventListener('load', () => {
+            rotateTip();
+            syncDeskData();
+            syncDeskCatalog();
+            detectDevicePlatform();
+        });
+
+        // Rotate random tips
+        function rotateTip() {
+            const tipText = document.getElementById('insightTipText');
+            if (!tipText) return;
+            const randomTip = MARKETING_TIPS[Math.floor(Math.random() * MARKETING_TIPS.length)];
+            tipText.innerText = randomTip;
+        }
+
+        // Detect Mobile platforms to conditionally show OS Native Share buttons
+        function detectDevicePlatform() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const actionBlock = document.getElementById('mobileShareActionBlock');
+            if (isMobile) {
+                actionBlock.classList.remove('hidden');
+            } else {
+                actionBlock.classList.add('hidden');
+            }
+        }
+
+        // Logout logic
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out of the Partner Desk?")) {
+                localStorage.removeItem('affiliateStatus');
+                localStorage.removeItem('affiliateData');
+                window.location.replace("https://prosify.in");
+            }
+        }
+
+        // Sync local stats with Central Repository affil.json database
+        async function syncDeskData() {
+            const localDataRaw = localStorage.getItem('affiliateData');
+            if (!localDataRaw) return;
+
+            let localUser = null;
+            try {
+                localUser = JSON.parse(localDataRaw);
+            } catch (e) {
+                return;
+            }
+
+            // Populate base UI from local storage first to prevent lag
+            document.getElementById('partnerFirstName').innerText = localUser.firstName || "Partner";
+            document.getElementById('partnerIdBadge').innerText = localUser.affiliateId || "N/A";
+            document.getElementById('profName').innerText = `${localUser.firstName || ''} ${localUser.lastName || ''}`;
+            document.getElementById('profEmail').innerText = localUser.email || 'N/A';
+            document.getElementById('profPhone').innerText = `+91 ${localUser.phone || 'N/A'}`;
+
+            // Pull live sync metrics from central repository
+            try {
+                const res = await fetch("https://raw.githubusercontent.com/qg7823gr23rb23ct81tvbtw34b6q3v43q46q48/q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w/main/affil.json");
+                if (res.ok) {
+                    const list = await res.json();
+                    const activeEntries = list.filter(e => e.identity !== "lost");
+                    const dbUser = activeEntries.find(e => e.email === localUser.email || e.phone === localUser.phone);
+                    
+                    if (dbUser) {
+                        activeAffiliate = dbUser;
+                        // Save latest to localStorage
+                        localStorage.setItem('affiliateData', JSON.stringify(dbUser));
+                        
+                        // Update stats
+                        document.getElementById('statViews').innerText = dbUser.views || 0;
+                        document.getElementById('statAttention').innerText = dbUser.userAttention || 0;
+                        
+                        // Load Commission Ledger dynamic properties [Earnings text / Commission percentage slots]
+                        document.getElementById('ledgerEarnings').innerText = dbUser.earnings || "₹0.00";
+                        document.getElementById('ledgerCommission').innerText = dbUser.commission || "2.5% Flat";
+                    }
+                }
+            } catch (err) {
+                console.warn("Unable to establish remote database sync connection: ", err);
+            }
+
+            // Sync generated links counts
+            const generatedCount = localStorage.getItem(`generated_count_${localUser.affiliateId}`) || 0;
+            document.getElementById('statLinks').innerText = generatedCount;
+        }
+
+        // Pull and shuffle projects from repository
+        async function syncDeskCatalog() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = `
+                <div class="col-span-full py-12 text-center text-xs text-slate-500 font-medium">
+                    <div class="animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent mx-auto mb-3"></div>
+                    <span>Scrutinizing project inventory...</span>
+                </div>
+            `;
+
+            const REPO_OWNER = "qg7823gr23rb23ct81tvbtw34b6q3v43q46q48";
+            const REPO_NAME = "q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w";
+            let fetchedList = [];
+            
+            try {
+                const res0 = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/landdata.json`);
+                if (res0.ok) {
+                    const data0 = await res0.json();
+                    if (Array.isArray(data0)) fetchedList = fetchedList.concat(data0);
+                }
+                
+                const promises = [1, 2, 3, 4, 5].map(idx => {
+                    return fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/landdata${idx}.json`)
+                        .then(r => r.ok ? r.json() : null)
+                        .catch(() => null);
+                });
+                
+                const results = await Promise.all(promises);
+                results.forEach(d => {
+                    if (d && Array.isArray(d)) fetchedList = fetchedList.concat(d);
+                });
+
+                // Filter out hidden products
+                fetchedList = fetchedList.filter(p => p.publish_status !== "Hidden");
+                activeProjectsList = fetchedList;
+
+                // Pick 5 Random Projects
+                const shuffled = [...fetchedList].sort(() => 0.5 - Math.random());
+                const randomFive = shuffled.slice(0, 5);
+
+                renderCatalogGrid(randomFive);
+
+            } catch (err) {
+                console.warn("Unable to fetch catalog resources:", err);
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-500 font-medium">Failed to retrieve projects. Please check connection.</div>`;
+            }
+        }
+
+        // Render project options on grid
+        function renderCatalogGrid(projects) {
+            const grid = document.getElementById('projectsGrid');
+            if (projects.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-500 font-medium">No projects available in catalog currently.</div>`;
+                return;
+            }
+
+            grid.innerHTML = projects.map(p => {
+                const locStr = `${p.location?.locality || ''}, ${p.location?.city || ''}`;
+                const priceVal = p.price_label || (p.price ? `₹ ${p.price}` : "Price on Request");
+                const bhkConfig = Array.isArray(p.bhk) ? p.bhk.join(', ') : "Premium";
+                const serialId = p.project_id || p.title.replace(/\s+/g, '_');
+                
+                return `
+                    <div class="bg-white rounded-3xl overflow-hidden border border-outline flex flex-col justify-between transition hover:shadow-md">
+                        <div>
+                            <img src="${p.header_image || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=600'}" class="w-full h-44 object-cover" alt="Banner">
+                            <div class="p-6">
+                                <span class="bg-primary/10 text-primary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">${p.category || 'Residential'}</span>
+                                <h4 class="text-md font-bold text-slate-900 mt-2.5 leading-tight">${p.title}</h4>
+                                <p class="text-[11px] text-slate-400 font-semibold mt-1 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px] text-slate-400">pin_drop</span> ${locStr}
+                                </p>
+                                <p class="text-[11px] text-slate-500 mt-2 line-clamp-2 leading-relaxed">${p.description || 'Verified luxury properties situated in strategic transit networks.'}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-50 bg-slate-50/50">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-bold tracking-wider block">Starting</span>
+                                <span class="text-xs font-bold text-slate-900 truncate max-w-[120px] inline-block">${priceVal}</span>
+                            </div>
+                            <button onclick="generateReferralDetails('${serialId}')" class="text-[10px] bg-primary text-white hover:bg-opacity-95 font-bold uppercase tracking-widest px-4 py-2.5 rounded-full transition shadow-sm">
+                                Make Link
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Safe slugify helper for titles
+        function slugify(text) {
+            return text.toString().toLowerCase().trim()
+                .replace(/\s+/g, '-')           
+                .replace(/[^\w\-]+/g, '')       
+                .replace(/\-\-+/g, '-');        
+        }
+
+        // Generate Custom referral values
+        function generateReferralDetails(projectId) {
+            const project = activeProjectsList.find(p => p.project_id === projectId || p.title.replace(/\s+/g, '_') === projectId);
+            if (!project) return;
+
+            activeSelectedProject = project;
+
+            const localUser = JSON.parse(localStorage.getItem('affiliateData'));
+            const partnerId = localUser.affiliateId;
+
+            const slug = slugify(project.title);
+            const timestamp = Math.floor(Date.now() / 1000);
+            const customUrl = `https://prosify.in/#${slug}_${timestamp}?ref=${partnerId}`;
+
+            // Populate Modal DOM elements
+            document.getElementById('modalProjImg').src = project.header_image || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=600';
+            document.getElementById('modalProjTitle').innerText = project.title;
+            document.getElementById('modalProjLoc').innerText = `${project.location?.locality || ''}, ${project.location?.city || ''}`;
+            document.getElementById('modalProjPrice').innerText = project.price_label || `₹ ${project.price || 'Price on Request'}`;
+            document.getElementById('referralUrlInput').value = customUrl;
+
+            // Generate Randomized caption
+            const randomCaptionRaw = SHARABLE_CAPTIONS[Math.floor(Math.random() * SHARABLE_CAPTIONS.length)];
+            const formattedCaption = randomCaptionRaw.replace("[LINK]", customUrl);
+            document.getElementById('modalCaptionArea').value = formattedCaption;
+
+            // Increment local generation statistics counter
+            let generatedCount = parseInt(localStorage.getItem(`generated_count_${partnerId}`) || 0);
+            generatedCount++;
+            localStorage.setItem(`generated_count_${partnerId}`, generatedCount);
+            document.getElementById('statLinks').innerText = generatedCount;
+
+            // Open Modal
+            const modal = document.getElementById('shareModal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+            activeSelectedProject = null;
+        }
+
+        // Copiable link assistant
+        function copyReferralLink() {
+            const input = document.getElementById('referralUrlInput');
+            input.select();
+            input.setSelectionRange(0, 99999); // For mobile devices
+
+            navigator.clipboard.writeText(input.value).then(() => {
+                alert("Partner URL copied successfully!");
+            }).catch(() => {
+                // Fallback copy execution
+                const tempArea = document.createElement('textarea');
+                tempArea.value = input.value;
+                document.body.appendChild(tempArea);
+                tempArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempArea);
+                alert("Partner URL copied successfully!");
+            });
+        }
+
+        // Trigger Mobile Native Share Sheet with custom captions
+        function triggerMobileShareSheet() {
+            const customUrl = document.getElementById('referralUrlInput').value;
+            const caption = document.getElementById('modalCaptionArea').value;
+            const titleStr = activeSelectedProject ? activeSelectedProject.title : "Prosify Listing";
+
+            if (navigator.share) {
+                navigator.share({
+                    title: titleStr,
+                    text: caption,
+                    url: customUrl
+                }).then(() => {
+                    console.log('Successfully shared partner payload.');
+                }).catch((err) => {
+                    console.log('Share dismissed:', err);
+                });
+            } else {
+                alert("Native sharing is not supported by your system browser configuration. Please copy the caption and link manually.");
+            }
+        }
+    </script>
+
+</body>
+</html>
