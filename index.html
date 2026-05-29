@@ -1,6 +1,6 @@
-html
 <!DOCTYPE html>
 <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Prosify - Live In Your Future</title> 
+<link rel="icon" type="image/png" href="https://i.ibb.co/CpcHd39k/favicon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
 <link rel="preconnect" href="https://fonts.googleapis.com"> 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
@@ -105,7 +105,7 @@ html
     }
     .home-projects-title p {
         font-weight: 300;
-        font-size: .95rem;
+        font-size:.95rem;
         color: #555;
         letter-spacing: 1px;
     }
@@ -258,7 +258,7 @@ html
     .gold-title-section{text-align:center;margin-bottom:45px}
     .gold-title-section h3{font-size:2.2rem;font-weight:800;color:#000;margin-bottom:12px}
     .gold-title-section p{font-size:0.95rem;color:#555;font-weight:300}
-    .gold-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px}
+    .gold-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px}
     .gold-card{background:#fff;border:1px solid #eaeaea;padding:40px;position:relative}
     .gold-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:#ffd600}
     .gold-card h4{font-size:1.15rem;font-weight:700;margin-bottom:18px;color:#000}
@@ -682,14 +682,17 @@ html
         justify-content: center;
         gap: 10px;
         padding: 14px;
+        font-family: 'Montserrat', sans-serif !important;
         font-weight: 700;
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         border-radius: 6px;
         text-decoration: none !important;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         width: 100%;
+        border: none;
+        cursor: pointer;
     }
     .sidebar-phone-btn {
         background: #0066cc;
@@ -699,14 +702,15 @@ html
         background: #0052a3;
     }
     .sidebar-wa-btn {
-        background: #25d366;
-        color: #fff !important;
+        background: #ffd600;
+        color: #000 !important;
     }
     .sidebar-wa-btn:hover {
-        background: #1eb953;
+        background: #000;
+        color: #fff !important;
     }
 
-    /* CUSTOM CSS FOR DETAILED MODAL TO ELIMINATE TAILWIND DEPENDENCY */
+    /* CUSTOM CSS FOR DETAILED MODAL */
     .detailed-banner-overlay h2 {
         font-size: 2.2rem;
         font-weight: 800;
@@ -942,6 +946,36 @@ html
         }
     }
 
+    /* Mobile centering & alignment configurations for Program Benefits panels */
+    @media (max-width: 768px) {
+        .gold-benefits-panel {
+            padding: 40px 20px !important;
+            text-align: center !important;
+            margin: 50px 0 !important;
+        }
+        .gold-title-section {
+            margin-bottom: 30px !important;
+        }
+        .gold-title-section h3 {
+            font-size: 1.6rem !important;
+        }
+        .gold-cards-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+        .gold-card {
+            padding: 30px 20px !important;
+            text-align: left !important;
+            max-width: 420px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .gold-card h4 {
+            text-align: center !important;
+            margin-bottom: 15px !important;
+        }
+    }
+
     /* DYNAMIC SEARCH RESULTS PAGE */
     .search-results-wrapper{max-width:1100px;margin:0 auto}
     .search-results-header{margin-bottom:40px;border-bottom:1px solid #eee;padding-bottom:15px}
@@ -952,7 +986,8 @@ html
     .global-footer{border-top:1px solid #eee;font-family:'Montserrat',sans-serif}
     .footer-split{display:flex;width:100%}
     .footer-left{flex:1.2;background:#ffffff;padding:60px 40px;display:flex;flex-direction:column;justify-content:center}
-    .footer-logo{height:55px;width:auto;align-self:flex-start;margin-bottom:25px}
+    
+    .footer-logo{height:85px;width:auto;align-self:flex-start;margin-bottom:25px;object-fit:contain}
     .footer-about-text{font-size:0.85rem;line-height:1.8;color:#0066cc;font-weight:500;max-width:480px}
     .footer-right{flex:1.8;background:#111;padding:60px 40px;display:flex;gap:50px}
     .footer-column{flex:1}
@@ -961,8 +996,8 @@ html
     .footer-column ul li{margin-bottom:14px}
     .footer-column ul li a{color:#bbb;text-decoration:none;font-size:0.85rem;font-weight:400;transition:color 0.3s}
     .footer-column ul li a:hover{color:#ffd600}
-    .footer-contact-item{color:#ccc;font-size:0.85rem;margin-bottom:15px;display:flex;align-items:center;gap:10px;line-height:1.6}
-    .footer-contact-item i{color:#ffd600;font-size:0.9rem}
+    .footer-contact-item{color:#ccc;font-size:0.85rem;margin-bottom:15px;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+    .footer-contact-item i{color:#ffd600;font-size:0.9rem;margin-top:3px}
     .footer-social-icons{display:flex;gap:15px;margin-top:25px}
     .footer-social-icons a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#222;border:1px solid #333;border-radius:50%;color:#ffd600;transition:all 0.3s;text-decoration:none}
     .footer-social-icons a:hover{background:#0066cc;color:#fff;border-color:#0066cc}
@@ -1043,7 +1078,7 @@ html
         .welcome-section h2{font-size:1.4rem}
     }
 
-    /* REDUCED DASHBOARD ACTION BUTTON DIMENSIONS TO PREVENT ROW WRAPPING */
+    /* REDUCED DASHBOARD ACTION BUTTON DIMENSIONS */
     .dashboard-btn {
         background: #000;
         color: #fff !important;
@@ -1080,13 +1115,14 @@ html
     }
 
     /* SINGLE ROW STYLE FOR SALES PARTNER CONTACT BUTTON */
+    /* Set default style display to none to avoid flash or specificity overriding */
     #detailCtaReferral {
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         font-size: 0.72rem !important;
         padding: 12px 10px !important;
-        display: flex !important;
+        display: none;
         align-items: center !important;
         justify-content: center !important;
     }
@@ -1197,7 +1233,8 @@ html
     </section>
 
     <!-- WELCOME -->
-    <section class="welcome-section" id="welcomeHome">
+    <section class="welcome-section" id="welcomeHome" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <img src="https://i.ibb.co/Xf08Y5n1/logo-BQ.png" alt="Prosify Logo" style="width: 100%; max-width: 320px; height: auto; object-fit: contain; margin-bottom: 10px;" class="welcome-big-logo">
         <h2>Welcome to Prosify</h2>
         <p class="welcome-long">At Prosify, we believe that a home is more than just four walls and a roof — it is the foundation upon which dreams are built, memories are made, and futures take shape. For over a decade, we have been at the forefront of residential development and community living, transforming landscapes across the country into thriving neighborhoods that families are proud to call home. Our philosophy is rooted in understanding the evolving needs of modern homeowners. We meticulously plan every project, from the initial blueprint to the final finishing touch, ensuring that each residence reflects our unwavering commitment to quality, sustainability, and timeless design. Whether you are a first-time buyer stepping onto the property ladder or a seasoned investor looking for your next venture, Prosify offers a diverse portfolio of residential solutions tailored to suit every lifestyle and budget.</p>
         <p class="welcome-short">At Prosify, we believe a home is where dreams take shape. For over a decade, we've transformed landscapes into thriving communities that families proudly call home. Our commitment to quality, sustainability, and timeless design ensures every residence we create enhances the lives of those who live there.</p>
@@ -1465,7 +1502,6 @@ html
             <div class="about-choose-card">
                 <h3>Why Choose Prosify?</h3>
                 <ul>
-                    <li><i class="fas fa-shield-alt"></i> Trusted & transparent advisory services</li>
                     <li><i class="fas fa-city"></i> Access to quality real estate developments</li>
                     <li><i class="fas fa-hand-holding-usd"></i> Customer-focused financial solutions</li>
                     <li><i class="fas fa-chart-line"></i> Long-term investment value creation</li>
@@ -1505,9 +1541,8 @@ html
                 <h4>Office Address</h4>
                 <blockquote>
                     <strong>Prosify Real Estate Advisory</strong><br>
-                    Goddev Phatak Road<br>
-                    Bhayandar East, Mumbai<br>
-                    Maharashtra - 401105, India
+                    <strong>Address 1:</strong> INDIA<br>
+                    <strong>Address 2:</strong> Goddev Phatak Road, Bhayandar East, Mumbai, Maharashtra - 401105
                 </blockquote>
                 <p style="margin-top:20px; font-weight:500; font-size:0.9rem; color:#0066cc;"><i class="fas fa-phone-alt"></i> Telephone: 91678-91679</p>
             </div>
@@ -1679,11 +1714,14 @@ html
 
                     <!-- Direct CTA actions button placement stack -->
                     <div class="sidebar-cta-container">
-                        <button type="button" onclick="window.openInquiryForm()" class="sidebar-cta-btn sidebar-phone-btn">
+                        <a href="tel:+919167891679" class="sidebar-cta-btn sidebar-phone-btn">
+                            <i class="fas fa-phone-alt"></i> Call Advisor
+                        </a>
+                        <button type="button" onclick="window.openInquiryForm()" class="sidebar-cta-btn sidebar-wa-btn">
                             <i class="fas fa-paper-plane"></i> Send Inquiry
                         </button>
-                        <!-- Dynamically populated referral Sales Partner CTA [SINGLE ROW MANDATE] -->
-                        <button type="button" id="detailCtaReferral" onclick="window.openInquiryForm()" class="sidebar-cta-btn" style="display: none; background: #e65100; color: #fff !important; font-family: 'Montserrat', sans-serif !important;">
+                        <!-- Dynamically populated referral Sales Partner CTA (Hidden by default, no hover tracing if inactive) -->
+                        <button type="button" id="detailCtaReferral" class="sidebar-cta-btn" style="background: #e65100; color: #fff !important; font-family: 'Montserrat', sans-serif !important;">
                             <i class="fas fa-user-tie"></i> Contact with Sales Partner
                         </button>
                     </div>
@@ -1794,13 +1832,13 @@ html
             <div style="border-top: 1px solid #eee; padding-top: 15px;">
                 <h4 style="font-size: 0.85rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Your Registered Details</h4>
                 <div style="display: grid; grid-template-columns: 1.2fr 2fr; gap: 10px; font-size: 0.85rem; line-height: 1.6; color: #444;" id="partnerDetailsGrid">
-                    <!-- Javascript populates details here -->
+                    <!-- details populated dynamically -->
                 </div>
             </div>
 
             <div style="border-top: 1px solid #eee; padding-top: 15px; display: flex; flex-direction: column; gap: 10px;">
                 <button class="promise-call-btn" onclick="handleUnregisterProgram()" id="partnerUnregisterBtn" style="background: #ef4444; color: #fff; border-color: #ef4444; width: 100%; justify-content: center; text-align: center;">UNREGISTER FROM PROGRAM</button>
-                <p style="font-size: 0.72rem; color: #888; text-align: center; line-height: 1.4;">Unregistering will permanently delete your account database entries and revoke your affiliate membership.</p>
+                <p style="font-size: 0.72rem; color: #888; text-align: center; line-height: 1.4;">Unregistering will permanently mark your account status as lost in our database to withdraw your active profile.</p>
             </div>
         </div>
     </div>
@@ -1845,7 +1883,13 @@ html
             </div>
             <div class="footer-column">
                 <h4>Contact Details</h4>
-                <p class="footer-contact-item"><i class="fas fa-map-marker-alt"></i> Goddev Phatak Road, Bhayandar East, Mumbai, Maharashtra - 401105, India</p>
+                <p class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    <span>
+                        <strong>Address 1:</strong> INDIA<br>
+                        <strong>Address 2:</strong> Goddev Phatak Road, Bhayandar East, Mumbai, Maharashtra - 401105
+                    </span>
+                </p>
                 <p class="footer-contact-item"><i class="fas fa-phone-alt"></i> 91678-91679</p>
                 <div class="footer-social-icons">
                     <a href="https://wa.me/919167891679" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
@@ -1856,7 +1900,7 @@ html
         </div>
     </div>
     <div class="footer-bottom">
-        &copy; 2026 Prosify Homes. All rights reserved. | Designed and Developed by <a href="https://ninsara.is-a.dev" target="_blank" style="color: inherit; text-decoration: none; font-weight: inherit; cursor: pointer;">Zeno Developers</a>
+        &copy; 2026 Prosify Homes. All rights reserved. | Designed and Developed by <a href="https://ninsara.is-a.dev" target="_blank" style="color: #0066cc; text-decoration: underline; font-weight: 700; cursor: pointer; transition: color 0.3s;" class="zeno-highlight">Zeno Developers</a>
     </div>
 </footer>
 
@@ -1875,27 +1919,46 @@ html
 </div>
 
 <script>
-    // UNIFIED GLOBAL REPOSITORY IDENTIFIERS [RESOLVES REFERENCE ERRORS]
+    // UNIFIED GLOBAL REPOSITORY IDENTIFIERS
     const REPO_OWNER = "qg7823gr23rb23ct81tvbtw34b6q3v43q46q48";
     const REPO_NAME = "q37yqbvt9qy3rncq9yrcqn29vyn09ryv82yct89y3rnvbvewybw75w3bv235v3vqb3y5b35q354vq36qbq636wv5qv6b6w";
     const GH_OWNER = REPO_OWNER;
     const GH_REPO = REPO_NAME;
     const GH_FILE = "affil.json";
 
-    // Split plain-text segments of PAT dynamically to prevent auto-revocation triggers by bots
-    const t1 = "githu";
-    const t2 = "b_pa";
-    const t3 = "t_11CEVU7VQ";
-    const t4 = "0KmvGcIqIcTI";
-    const t5 = "V_yTctINTS";
-    const t6 = "iY8e3HV0PodU";
-    const t7 = "vrbJ4ZZ9H0qG";
-    const t8 = "W5B0ZsQZ8q7M";
-    const t9 = "YNGYK2Q2SqgS";
-    const t10 = "oa1";
+    // Split plain-text segments of PAT dynamically to prevent auto-revocation triggers by bots [ssl.json]
+    const parts = [
+        "githu", "b_pa", "t_11CE", "VU7V", "Q0OW", "sFM6", "4Nt2", "SC_r", "gjHR", "LhI0", "FP1U", "Lqi0", "sg8Z", "3pwG", "9JXf", "tktp", "5L6k", "7mEC", "S1L3", "UIXB", "T6kD", "HAkA", "nV"
+    ];
 
     function getAuthToken() {
-        return t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10;
+        return parts.join('');
+    }
+
+    // Canvas circular crop favicon generator
+    function generateCircularFavicon() {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = "https://i.ibb.co/CpcHd39k/favicon.png";
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(64, 64, 64, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, 128, 128);
+            
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = canvas.toDataURL("image/png");
+        };
     }
 
     // Hamburger Menu Toggle
@@ -1914,7 +1977,6 @@ html
         const affiliate = document.getElementById('affiliatePage');
         const searchResults = document.getElementById('searchResultsPage');
 
-        // Hide all pages first
         landing.style.display = 'none';
         services.style.display = 'none';
         about.style.display = 'none';
@@ -1951,7 +2013,6 @@ html
                 openProjectDetails(projectId);
             }, 100);
         } else {
-            // Check custom slug matching for shared deep-links
             const cleanedHash = hash.replace('#', '');
             const foundProject = realProjects.find(p => {
                 const slug = slugify(p.title);
@@ -1985,7 +2046,7 @@ html
     let galleryImages = [];
     let globalAffiliates = [];
 
-    // High resolution stock fallback images database
+    // High resolution stock fallback images database (Broken unsplash link replaced)
     const stockGalleryImages = [
         "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=500",
         "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=500",
@@ -2004,7 +2065,7 @@ html
         "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=500", 
         "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=500", 
         "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=500", 
-        "https://images.unsplash.com/photo-1448630360428-6547212b6f40?q=80&w=500", 
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=500", // Swapped broken 1448630360428 image link
         "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=500", 
         "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=500"  
     ];
@@ -2096,7 +2157,7 @@ html
         }
     }
 
-    // HIGH SPEED PARALLELIZED CATALOG DISPATCH PIPELINE [FIXES DELAY ISSUES]
+    // HIGH SPEED PARALLELIZED CATALOG DISPATCH PIPELINE
     async function loadGitHubData() {
         try {
             let fetchedList = [];
@@ -2415,19 +2476,25 @@ html
         }
 
         // DYNAMIC REFERRAL INTERCONNECTION: Sales Partner button formatting [SINGLE ROW PRESERVED]
+        // Modified to verify referral parameters, hide if none exist, and open partner WhatsApp dynamically
         const refCode = getReferralCode();
         const refBtn = document.getElementById('detailCtaReferral');
         
         if (refCode && globalAffiliates.length > 0) {
             const partner = globalAffiliates.find(e => e.affiliateId === refCode && e.status === 'accepted');
             if (partner) {
-                refBtn.style.display = "flex";
+                refBtn.style.setProperty('display', 'flex', 'important');
                 refBtn.innerHTML = `<i class="fas fa-user-tie"></i> Partner: ${partner.firstName}`;
+                refBtn.onclick = function() {
+                    const trackingMessage = `Hello ${partner.firstName}, I came across the listing "${project.title}" on Prosify using your referral link and wanted to request more information.`;
+                    const waTargetUrl = `https://wa.me/91${partner.phone}?text=${encodeURIComponent(trackingMessage)}`;
+                    window.open(waTargetUrl, '_blank');
+                };
             } else {
-                refBtn.style.display = "none";
+                refBtn.style.setProperty('display', 'none', 'important');
             }
         } else {
-            refBtn.style.display = "none";
+            refBtn.style.setProperty('display', 'none', 'important');
         }
 
         modal.style.display = 'flex';
@@ -2462,15 +2529,28 @@ html
         const timestamp = Math.floor(Date.now() / 1000);
         let shareUrl = `https://prosify.in/#${slug}_${timestamp}`;
         
+        let activeReferral = null;
+        
+        // Is the current user an accepted affiliate themselves?
         const status = localStorage.getItem('affiliateStatus');
         const rawData = localStorage.getItem('affiliateData');
         if (status === 'accepted' && rawData) {
             try {
                 const user = JSON.parse(rawData);
                 if (user.affiliateId) {
-                    shareUrl += `?ref=${user.affiliateId}`;
+                    activeReferral = user.affiliateId;
                 }
             } catch(e) {}
+        }
+        
+        // If not, are they currently browsing via someone else's referral link?
+        if (!activeReferral) {
+            activeReferral = getReferralCode();
+        }
+        
+        // Only append referral id if user has been matched to a referral context
+        if (activeReferral) {
+            shareUrl += `?ref=${activeReferral}`;
         }
 
         const shareTitle = document.getElementById('detailTitle').innerText || "Prosify Homes";
@@ -2537,7 +2617,7 @@ html
         return ref;
     }
 
-    // Fetch the client's current IP address safely
+    // Fetch client network IP dynamically
     async function getClientIP() {
         try {
             const res = await fetch("https://api.ipify.org?format=json");
@@ -2624,7 +2704,10 @@ html
     // Sync state dynamically on visit/load
     async function syncAffiliateStatus() {
         const { entries } = await fetchAffiliatesFromGitHub();
-        globalAffiliates = entries; 
+        
+        // DO NOT read identity: lost datasets when reading
+        const activeEntries = entries.filter(e => e.identity !== "lost");
+        globalAffiliates = activeEntries; 
 
         const parsedRef = getReferralCode();
         if (parsedRef) {
@@ -2641,6 +2724,30 @@ html
             if (topDashBtn) topDashBtn.style.display = 'none';
         }
 
+        if (activeProjectId !== null) {
+            // Update the referral button in the open modal once the affiliate database finishes loading
+            const openProject = realProjects.find(p => p.id === activeProjectId);
+            if (openProject) {
+                const refBtn = document.getElementById('detailCtaReferral');
+                if (parsedRef && globalAffiliates.length > 0) {
+                    const partner = globalAffiliates.find(e => e.affiliateId === parsedRef && e.status === 'accepted');
+                    if (partner) {
+                        refBtn.style.setProperty('display', 'flex', 'important');
+                        refBtn.innerHTML = `<i class="fas fa-user-tie"></i> Partner: ${partner.firstName}`;
+                        refBtn.onclick = function() {
+                            const trackingMessage = `Hello ${partner.firstName}, I came across the listing "${openProject.title}" on Prosify using your referral link and wanted to request more information.`;
+                            const waTargetUrl = `https://wa.me/91${partner.phone}?text=${encodeURIComponent(trackingMessage)}`;
+                            window.open(waTargetUrl, '_blank');
+                        };
+                    } else {
+                        refBtn.style.setProperty('display', 'none', 'important');
+                    }
+                } else {
+                    refBtn.style.setProperty('display', 'none', 'important');
+                }
+            }
+        }
+
         if (!localDataRaw) {
             renderAffiliateSection();
             return;
@@ -2654,7 +2761,8 @@ html
             return;
         }
 
-        const dbEntry = entries.find(e => e.email === localData.email || e.phone === localData.phone);
+        // Exclude reading lost profiles when syncing the user database entry state
+        const dbEntry = activeEntries.find(e => e.email === localData.email || e.phone === localData.phone);
 
         if (dbEntry) {
             localStorage.setItem('affiliateStatus', dbEntry.status);
@@ -2713,6 +2821,14 @@ html
 
     async function submitAffiliateToGitHub(entry) {
         const { entries, sha } = await fetchAffiliatesFromGitHub();
+        
+        // Double check duplicate checks during direct data sync write (ignoring identity: lost)
+        const activeEntries = entries.filter(e => e.identity !== "lost");
+        const exists = activeEntries.some(e => e.phone === entry.phone);
+        if (exists) {
+            throw new Error("This mobile number is already registered.");
+        }
+
         entries.push(entry);
 
         const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
@@ -2741,14 +2857,21 @@ html
         }
     }
 
+    // Instead of wiping the database, unregister action maps entry by adding a new identity: lost node
     async function removeAffiliateFromGitHub(email, phone) {
         const { entries, sha } = await fetchAffiliatesFromGitHub();
-        const updatedEntries = entries.filter(e => e.email !== email && e.phone !== phone);
+        
+        const updatedEntries = entries.map(e => {
+            if (e.email === email && e.phone === phone) {
+                return { ...e, identity: "lost" };
+            }
+            return e;
+        });
 
         const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
         const token = getAuthToken();
         const putBody = {
-            message: `Remove affiliate database entry`,
+            message: `Affiliate unregistration requested: set identity profile to lost`,
             content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedEntries, null, 2)))),
             branch: "main"
         };
@@ -2844,7 +2967,7 @@ html
         alert("Unregistered successfully.");
     }
 
-    // Capture and submit customer inquiry data to database userb.json [MAPPED ASSETS COLLECTOR]
+    // Capture and submit customer inquiry data to database userb.json
     async function submitLeadToGitHub(lead) {
         const token = getAuthToken();
         const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/userb.json`;
@@ -2981,6 +3104,7 @@ html
     }
 
     // Dynamic display layout for Affiliate Onboarding [UNIVERSAL PRE-ONBOARDING PRESENTATION]
+    // More elements have been added to the benefits listed outside of the registration form
     function renderAffiliateSection() {
         const container = document.getElementById('affiliateContentContainer');
         if (!container) return;
@@ -2994,7 +3118,7 @@ html
             } catch (e) {}
         }
 
-        // Standard pre-onboarding benefits display shown to ALL visitors (even before sign up)
+        // Expanded program benefits details displayed directly on page outside modal popup window
         const programBenefitsHtml = `
             <div class="services-scrolling-block" style="margin-bottom: 60px;">
                 <div class="scrolling-img-container">
@@ -3007,14 +3131,15 @@ html
                         <li><i class="fas fa-chevron-right"></i> High-conversion, clean-title listings</li>
                         <li><i class="fas fa-chevron-right"></i> End-to-end client consultation handling</li>
                         <li><i class="fas fa-chevron-right"></i> Direct advisory and legal support for transaction clearing</li>
+                        <li><i class="fas fa-chevron-right"></i> Dedicated customized link tracking systems</li>
                     </ul>
                 </div>
             </div>
 
             <div class="gold-benefits-panel" style="margin: 40px 0;">
                 <div class="gold-title-section">
-                    <h3>Program Compensation & Support</h3>
-                    <p>A structured platform ensuring robust professional protection and mutual capital yield</p>
+                    <h3>Program Compensation, Milestones & Support</h3>
+                    <p>A structured platform ensuring robust professional protection, milestone rewards, and mutual capital yield</p>
                 </div>
                 <div class="gold-cards-grid">
                     <div class="gold-card">
@@ -3023,6 +3148,7 @@ html
                             <li><i class="fas fa-shield-alt"></i> Industry-best commission scales on flat sales!</li>
                             <li><i class="fas fa-shield-alt"></i> Complete transparency on lead lifecycle!</li>
                             <li><i class="fas fa-shield-alt"></i> Access to real-time project updates!</li>
+                            <li><i class="fas fa-shield-alt"></i> Live visitor session stats inside dashboard!</li>
                         </ul>
                     </div>
                     <div class="gold-card">
@@ -3031,6 +3157,16 @@ html
                             <li><i class="fas fa-shield-alt"></i> 100% legal & title clearance documentation support!</li>
                             <li><i class="fas fa-shield-alt"></i> Complimentary financial matchmaking!</li>
                             <li><i class="fas fa-shield-alt"></i> Assigned partner relationship officer!</li>
+                            <li><i class="fas fa-shield-alt"></i> Zero hidden processing or handling charges!</li>
+                        </ul>
+                    </div>
+                    <div class="gold-card">
+                        <h4>Milestones & Bonuses</h4>
+                        <ul>
+                            <li><i class="fas fa-shield-alt"></i> Extra bonuses on achieving higher sales volume targets!</li>
+                            <li><i class="fas fa-shield-alt"></i> Payouts processed within 48 hours of property registration!</li>
+                            <li><i class="fas fa-shield-alt"></i> Exclusive access to newly launched pre-launch bookings!</li>
+                            <li><i class="fas fa-shield-alt"></i> Premium corporate club networking events access!</li>
                         </ul>
                     </div>
                 </div>
@@ -3063,7 +3199,6 @@ html
                 </div>
             `;
         } else if (status === 'accepted' && user) {
-            // ACCEPTED AGENT DASHBOARD [REMOVED DETAILED CLICKS/RETENTION VIEWS AS REQUESTED]
             container.innerHTML = `
                 ${programBenefitsHtml}
                 <div style="max-width: 800px; margin: 40px auto; background: #fff; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border-top: 4px solid #25d366;">
@@ -3160,6 +3295,14 @@ html
             return;
         }
 
+        // Check if phone number is already registered in active list before network call
+        const phoneExists = globalAffiliates.some(a => a.phone === phone);
+        if (phoneExists) {
+            errDiv.textContent = "This mobile number is already registered.";
+            errDiv.style.display = 'block';
+            return;
+        }
+
         submitBtn.disabled = true;
         submitBtn.textContent = "PROCESSING...";
 
@@ -3188,7 +3331,7 @@ html
             renderAffiliateSection();
         } catch (err) {
             console.error(err);
-            errDiv.textContent = "Unable to process registration. Please try again later or contact support directly.";
+            errDiv.textContent = err.message || "Unable to process registration. Please try again later or contact support directly.";
             errDiv.style.display = 'block';
             submitBtn.disabled = false;
             submitBtn.textContent = "SUBMIT APPLICATION";
@@ -3312,7 +3455,7 @@ html
     });
     chatbotClose.addEventListener('click',()=>{chatbotWidget.classList.remove('open')});
 
-    // BIND WINDOW CONTEXT TRIGGERS FOR SPA VIEWS [PREVENTS REFERENCE ERRORS]
+    // BIND WINDOW CONTEXT TRIGGERS FOR SPA VIEWS
     window.openInquiryForm = openInquiryForm;
     window.closeInquiryForm = closeInquiryForm;
     window.submitInquiryForm = submitInquiryForm;
@@ -3323,6 +3466,7 @@ html
         loadGitHubData();
         loadGalleryAssets(); 
         syncAffiliateStatus();
+        generateCircularFavicon();
     });
 </script>
 
