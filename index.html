@@ -1331,7 +1331,7 @@
                         </div>
                     </div>
                     <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
-                    .testimonial-text{font-weight:300;font-size:.82rem;color:#444;line-height:1.85;font-style:italic}As a first-time homebuyer, I was terrified of the entire process. I'd heard horror stories from friends about hidden costs, endless delays, and developers who vanish after taking your money. Prosify was the complete opposite. Their sales team — especially Meera, who guided me through everything — was patient beyond belief. She answered hundreds of my questions over four months and never once made me feel like a burden. They walked me through every document, explained every clause, and even helped me with the bank mortgage process. The transparency was refreshing: no hidden charges, no surprise fees, no last-minute changes. When I finally moved into my two-bedroom apartment, it was exactly what I'd been shown. The construction quality, fittings, paint finish — everything was impeccable. I've since recommended Prosify to my sister and three colleagues, and they've all had similarly wonderful experiences.</div>
+                    <div class="testimonial-text">As a first-time homebuyer, I was terrified of the entire process. I'd heard horror stories from friends about hidden costs, endless delays, and developers who vanish after taking your money. Prosify was the complete opposite. Their sales team — especially Meera, who guided me through everything — was patient beyond belief. She answered hundreds of my questions over four months and never once made me feel like a burden. They walked me through every document, explained every clause, and even helped me with the bank mortgage process. The transparency was refreshing: no hidden charges, no surprise fees, no last-minute changes. When I finally moved into my two-bedroom apartment, it was exactly what I'd been shown. The construction quality, fittings, paint finish — everything was impeccable. I've since recommended Prosify to my sister and three colleagues, and they've all had similarly wonderful experiences.</div>
                 </div>
             </div>
             <div class="testimonial-nav" id="testimonialDots">
@@ -2509,7 +2509,7 @@
                 refBtn.style.setProperty('display', 'flex', 'important');
                 refBtn.innerHTML = `<i class="fas fa-user-tie"></i> Partner: ${partner.firstName}`;
                 refBtn.onclick = function() {
-                    const trackingMessage = `Hi ${partner.firstName}, I came across your recommendation of the property "${project.title}" on Prosify (ID: ${partner.affiliateId}) and would love to request more details about it. Please let me know how we can proceed!`;
+                    const trackingMessage = `Hi ${partner.firstName}, I saw your recommendation of the property "${project.title}" on Prosify (ID: ${partner.affiliateId}) and would love to get more details about it. Please let me know how we can proceed!`;
                     const waTargetUrl = `https://wa.me/91${partner.phone}?text=${encodeURIComponent(trackingMessage)}`;
                     window.open(waTargetUrl, '_blank');
                 };
@@ -2621,10 +2621,13 @@
     }
 
     // Safe Referral extraction from URL hash or query [TRACKING REFERRAL ACTIONS]
+    // Persists referral code inside sessionStorage to avoid loss on state hash updates [ssl.json]
     function getReferralCode() {
+        let ref = sessionStorage.getItem('active_referral');
+        if (ref) return ref;
+
         const hash = window.location.hash || '';
         const search = window.location.search || '';
-        let ref = null;
         
         if (search.includes('ref=')) {
             const params = new URLSearchParams(search);
@@ -2636,6 +2639,9 @@
                 const params = new URLSearchParams(splitByQuery[1]);
                 ref = params.get('ref');
             }
+        }
+        if (ref) {
+            sessionStorage.setItem('active_referral', ref);
         }
         return ref;
     }
@@ -2655,73 +2661,83 @@
     }
 
     // Update real-time metrics on GitHub with IP duplicate protection [PREVENTS INCOGNITO INFLATION]
-    async function trackAffiliateActivity(refCode, type) {
-        if (!refCode) return;
+    // Written to process entirely in background thread context to avoid blocking visual flows
+    function trackAffiliateActivity(refCode, type) {
+        if (!refCode) return Promise.resolve();
         
         const sessionKey = `tracked_${type}_${refCode}`;
         if (sessionStorage.getItem(sessionKey)) {
-            return;
+            return Promise.resolve();
         }
 
-        try {
-            const clientIP = await getClientIP();
-            const { entries, sha } = await fetchAffiliatesFromGitHub();
-            let updated = false;
+        return new Promise((resolve) => {
+            setTimeout(async () => {
+                try {
+                    const clientIP = await getClientIP();
+                    const { entries, sha } = await fetchAffiliatesFromGitHub();
+                    let updated = false;
 
-            const updatedEntries = entries.map(e => {
-                if (e.affiliateId === refCode && e.status === 'accepted') {
-                    if (type === 'view') {
-                        if (!e.viewedIPs) e.viewedIPs = [];
-                        if (clientIP && e.viewedIPs.includes(clientIP)) {
-                            console.log(`Duplicate referral view blocked for IP: ${clientIP}`);
-                        } else {
-                            if (clientIP) e.viewedIPs.push(clientIP);
-                            e.views = (e.views || 0) + 1;
-                            updated = true;
+                    const updatedEntries = entries.map(e => {
+                        if (e.affiliateId === refCode && e.status === 'accepted') {
+                            if (type === 'view') {
+                                if (!e.viewedIPs) e.viewedIPs = [];
+                                if (clientIP && e.viewedIPs.includes(clientIP)) {
+                                    // IP already logged
+                                } else {
+                                    if (clientIP) e.viewedIPs.push(clientIP);
+                                    e.views = (e.views || 0) + 1;
+                                    updated = true;
+                                }
+                            } else if (type === 'inquiry') {
+                                if (!e.inquiredIPs) e.inquiredIPs = [];
+                                if (clientIP && e.inquiredIPs.includes(clientIP)) {
+                                    // IP already logged
+                                } else {
+                                    if (clientIP) e.inquiredIPs.push(clientIP);
+                                    e.userAttention = (e.userAttention || 0) + 1;
+                                    updated = true;
+                                }
+                            }
                         }
-                    } else if (type === 'inquiry') {
-                        if (!e.inquiredIPs) e.inquiredIPs = [];
-                        if (clientIP && e.inquiredIPs.includes(clientIP)) {
-                            console.log(`Duplicate inquiry action blocked for IP: ${clientIP}`);
-                        } else {
-                            if (clientIP) e.inquiredIPs.push(clientIP);
-                            e.userAttention = (e.userAttention || 0) + 1;
-                            updated = true;
-                        }
+                        return e;
+                    });
+
+                    if (!updated) {
+                        resolve();
+                        return;
                     }
+
+                    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+                    const token = getAuthToken();
+                    const putBody = {
+                        message: `Update affiliate statistics: increment ${type} counter for ${refCode}`,
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedEntries, null, 2)))),
+                        branch: "main"
+                    };
+                    if (sha) {
+                        putBody.sha = sha;
+                    }
+
+                    const putRes = await fetch(url, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                            "Accept": "application/vnd.github.v3+json"
+                        },
+                        body: JSON.stringify(putBody)
+                    });
+
+                    if (putRes.ok) {
+                        sessionStorage.setItem(sessionKey, "true");
+                    }
+                } catch (err) {
+                    console.warn("Analytics registration unsuccessful:", err);
+                } finally {
+                    resolve();
                 }
-                return e;
-            });
-
-            if (!updated) return; 
-
-            const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
-            const token = getAuthToken();
-            const putBody = {
-                message: `Update affiliate statistics: increment ${type} counter for ${refCode}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedEntries, null, 2)))),
-                branch: "main"
-            };
-            if (sha) {
-                putBody.sha = sha;
-            }
-
-            const putRes = await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/vnd.github.v3+json"
-                },
-                body: JSON.stringify(putBody)
-            });
-
-            if (putRes.ok) {
-                sessionStorage.setItem(sessionKey, "true");
-            }
-        } catch (err) {
-            console.warn("Analytics registration unsuccessful:", err);
-        }
+            }, 50);
+        });
     }
 
     // Sync state dynamically on visit/load
@@ -3046,7 +3062,62 @@
     }
 
     // Modal Control and Inquiry Form submission handlers
+    // Upgraded to verify historical submission records and bypass form entry automatically [frictionless design]
     function openInquiryForm() {
+        const activeProject = realProjects.find(p => p.id === activeProjectId);
+        const projectTitle = activeProject ? activeProject.title : "General Inquiry";
+
+        let inquiries = JSON.parse(localStorage.getItem('submittedInquiries') || '[]');
+        const alreadySubmittedThisProject = inquiries.some(inq => inq.project === projectTitle);
+
+        // If this specific project has already been submitted, go straight to chat
+        if (alreadySubmittedThisProject) {
+            window.location.href = "chat.html";
+            return;
+        }
+
+        // Check if user has registered ANY lead profile previously
+        const previousLeadRaw = localStorage.getItem('leadData');
+        if (previousLeadRaw) {
+            try {
+                const prevLead = JSON.parse(previousLeadRaw);
+                if (prevLead.firstName && prevLead.lastName && prevLead.email && prevLead.phone) {
+                    // Auto-duplicate profile details for frictionless redirect
+                    const refCode = getReferralCode();
+                    const duplicatePayload = {
+                        firstName: prevLead.firstName,
+                        lastName: prevLead.lastName,
+                        email: prevLead.email,
+                        phone: prevLead.phone,
+                        project: projectTitle,
+                        refCode: refCode || "none",
+                        submittedAt: new Date().toISOString()
+                    };
+
+                    // Persist to local array
+                    inquiries.push(duplicatePayload);
+                    localStorage.setItem('submittedInquiries', JSON.stringify(inquiries));
+                    localStorage.setItem('leadData', JSON.stringify(duplicatePayload));
+
+                    // Async transfer lead payload to GitHub repository
+                    submitLeadToGitHub(duplicatePayload).catch(err => {
+                        console.warn("Background auto-duplicate submit failed: ", err);
+                    });
+
+                    // Track analytics if referral code detected
+                    if (refCode) {
+                        trackAffiliateActivity(refCode, 'inquiry').catch(() => {});
+                    }
+
+                    window.location.href = "chat.html";
+                    return;
+                }
+            } catch (e) {
+                console.warn("Error processing auto-duplicate layout: ", e);
+            }
+        }
+
+        // Show the form only if no pre-existing profiles exist
         const modal = document.getElementById('inquiryModal');
         if (!modal) return;
         modal.style.display = 'flex';
@@ -3106,10 +3177,15 @@
             
             // Save lead locally
             localStorage.setItem('leadData', JSON.stringify(leadPayload));
+            
+            // Save inside submittedInquiries array to track multiple project inquiries
+            let inquiries = JSON.parse(localStorage.getItem('submittedInquiries') || '[]');
+            inquiries.push(leadPayload);
+            localStorage.setItem('submittedInquiries', JSON.stringify(inquiries));
 
             // Async trigger affiliate increment
             if (refCode) {
-                await trackAffiliateActivity(refCode, 'inquiry');
+                await trackAffiliateActivity(refCode, 'inquiry').catch(() => {});
             }
 
             closeInquiryForm();
